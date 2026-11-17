@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Process Atlas — Requirements &amp; Use Cases</title>
+<meta name="description" content="Numbered requirements and use cases for business process extraction, documentation and BPMN visualization.">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div class="shell">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">PA</div>
+      <div>
+        <div class="brand-name">Process Atlas</div>
+        <div class="brand-sub">Design set · v1.0</div>
+      </div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-title">Documents</div>
+      <a class="nav-link" href="features.html">Feature blueprint</a>
+      <a class="nav-link is-active" href="requirements.html">Requirements &amp; use cases</a>
+      <a class="nav-link" href="test-cases.html">Test cases</a>
+      <a class="nav-link" href="index.html">Traceability hub</a>
+    </div>
+
+    <div class="nav-sep"></div>
+
+    <div class="nav-group">
+      <div class="nav-title">On this page</div>
+      <a class="nav-link" href="#scope">Scope &amp; principles</a>
+      <a class="nav-link" href="#model">Model anatomy</a>
+      <a class="nav-link" href="#req-ext">REQ-EXT — Extraction</a>
+      <a class="nav-link" href="#req-val">REQ-VAL — Value</a>
+      <a class="nav-link" href="#req-doc">REQ-DOC — Documentation</a>
+      <a class="nav-link" href="#req-viz">REQ-VIZ — Visualization</a>
+      <a class="nav-link" href="#req-mod">REQ-MOD — Model &amp; API</a>
+      <a class="nav-link" href="#gates">Quality gates</a>
+      <a class="nav-link" href="#usecases">Use cases</a>
+      <a class="nav-link" href="#glossary">Glossary</a>
+    </div>
+
+    <div class="sidebar-foot">
+      <strong>49 requirements</strong><br>
+      16 use cases<br><br>
+      <strong>Traceability</strong><br>
+      Every requirement maps to a use case and at least one test case.
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <div class="topbar">
+      <div class="breadcrumb">Process Atlas / <b>Requirements &amp; use cases</b></div>
+      <div class="topbar-right">
+        <span class="pill pill--navy">REQ v1.0</span>
+        <span class="pill pill--ok">Draft for review</span>
+      </div>
+    </div>
+
+    <header class="hero">
+      <div class="hero-inner">
+        <div class="kicker">Requirements baseline · 49 requirements · 16 use cases</div>
+        <h1>System requirements and use cases</h1>
+        <p class="lede">
+          49 numbered requirements across extraction, business value, documentation, visualization and the
+          model/API contract. Each requirement is testable, exercised by at least one use case, and verified by at
+          least one test case.
+        </p>
+        <div class="hero-meta">
+          <div><b>Document</b>Requirements &amp; use cases</div>
+          <div><b>Version</b>1.0 — baseline draft</div>
+          <div><b>Requirement groups</b>EXT · VAL · DOC · VIZ · MOD</div>
+          <div><b>Traceability</b>REQ → UC → TC</div>
+          <div><b>Out of scope</b>Model choice, hosting, deployment</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="wrap">
+
+      <!-- ============ SCOPE ============ -->
+      <section class="block" id="scope">
+        <h2 class="sec"><span class="num">01</span>Scope &amp; design principles</h2>
+        <p class="section-intro">
+          This document specifies behaviour, not implementation. Model choice, inference hosting, deployment topology
+          and security operations are treated as given and are not requirements here.
+        </p>
+
+        <div class="grid g2">
+          <div class="card">
+            <div class="label">In scope</div>
+            <h3>Extraction → Documentation → Visualization</h3>
+            <ul style="font-size:13.4px;color:#5d7488;margin-bottom:0">
+              <li>Ingesting and normalising multimodal process evidence</li>
+              <li>Extracting actors, activities, gateways, events, data and systems</li>
+              <li>Extracting business value, outcomes and KPIs</li>
+              <li>Persisting a canonical, evidence-linked JSON model</li>
+              <li>Generating process documentation and BPMN 2.0 diagrams</li>
+              <li>Visualising, comparing and exporting the model</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="label">Out of scope</div>
+            <h3>Execution and platform concerns</h3>
+            <ul style="font-size:13.4px;color:#5d7488;margin-bottom:0">
+              <li>BPMN execution engines and task inboxes</li>
+              <li>RPA generation, code generation, live process mining</li>
+              <li>To-be simulation and optimisation</li>
+              <li>Model/provider selection and prompt engineering strategy</li>
+              <li>Hosting, tenancy, backups, disaster recovery</li>
+              <li>Authentication and authorisation mechanics</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 class="sub">Normative constraints</h3>
+        <div class="tablewrap">
+          <table class="tbl">
+            <thead><tr><th style="width:26%">Constraint</th><th>Definition</th><th style="width:20%">Enforced by</th></tr></thead>
+            <tbody>
+              <tr><td><b>Evidence before assertion</b></td><td>No flow element enters the model without a resolvable locator and a verbatim quote. Unsupported content is stored as a flagged candidate.</td><td>REQ-EXT-08, REQ-EXT-14, REQ-DOC-08</td></tr>
+              <tr><td><b>Single model authority</b></td><td>Brief, step table, BPMN and canvas are generated from one JSON document. No parallel copy exists.</td><td>REQ-DOC-01, REQ-DOC-03, REQ-VIZ-03</td></tr>
+              <tr><td><b>Typed value block</b></td><td>Lever, KPI, baseline, target and impact are schema fields with explicit assumption flags.</td><td>REQ-VAL-01 … 06</td></tr>
+              <tr><td><b>Auditable determinism</b></td><td>A model is reproducible from its inputs, prompt version and seed; every edit is attributed.</td><td>REQ-EXT-15, REQ-DOC-02, REQ-DOC-10</td></tr>
+              <tr><td><b>Standards at the boundary</b></td><td>Export must open in an independent BPMN modeler and survive a round-trip.</td><td>REQ-VIZ-01, REQ-VIZ-04</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ MODEL ============ -->
+      <section class="block" id="model">
+        <h2 class="sec"><span class="num">02</span>The canonical model</h2>
+        <p class="section-intro">
+          All requirements refer to one artefact: the <b>Canonical Process Model</b> (CPM), a versioned JSON document.
+          Evidence, value and provenance are not add-ons — they are fields on the model.
+        </p>
+
+        <figure class="diagram">
+          <svg viewBox="0 0 1080 344" role="img" aria-label="Canonical process model anatomy: lanes, nodes, data, evidence, value and provenance surrounding one versioned JSON document" font-family="ui-sans-serif, Segoe UI, Inter, sans-serif">
+            <!-- connectors -->
+            <g stroke="#c9e0f1" stroke-width="1.5">
+              <path d="M270 62 C360 62, 380 140, 438 156" fill="none"/>
+              <path d="M270 172 L438 172" fill="none"/>
+              <path d="M270 282 C360 282, 380 204, 438 188" fill="none"/>
+              <path d="M810 62 C720 62, 700 140, 642 156" fill="none"/>
+              <path d="M810 172 L642 172" fill="none"/>
+              <path d="M810 282 C720 282, 700 204, 642 188" fill="none"/>
+            </g>
+
+            <!-- centre -->
+            <rect x="440" y="118" width="200" height="108" rx="14" fill="#0e3355"/>
+            <text x="540" y="146" text-anchor="middle" font-size="10" letter-spacing="2" fill="#8fbde0" font-weight="700">SYSTEM OF RECORD</text>
+            <text x="540" y="172" text-anchor="middle" font-size="16" fill="#ffffff" font-weight="650">Process model</text>
+            <text x="540" y="192" text-anchor="middle" font-size="11" fill="#b8d3e7" font-family="ui-monospace, monospace">schema 1.0 · JSON</text>
+            <text x="540" y="210" text-anchor="middle" font-size="11" fill="#b8d3e7">immutable versions</text>
+
+            <!-- left -->
+            <g>
+              <rect x="64" y="30" width="206" height="64" rx="10" fill="#ffffff" stroke="#d8e4ef"/>
+              <text x="80" y="53" font-size="12.5" font-weight="650" fill="#0e3355">Lanes &amp; actors</text>
+              <text x="80" y="72" font-size="10.5" fill="#7e93a5">roles, departments, external parties</text>
+            </g>
+            <g>
+              <rect x="64" y="140" width="206" height="64" rx="10" fill="#ffffff" stroke="#d8e4ef"/>
+              <text x="80" y="163" font-size="12.5" font-weight="650" fill="#0e3355">Nodes &amp; sequence flows</text>
+              <text x="80" y="182" font-size="10.5" fill="#7e93a5">tasks, gateways, events, edges</text>
+            </g>
+            <g>
+              <rect x="64" y="250" width="206" height="64" rx="10" fill="#ffffff" stroke="#d8e4ef"/>
+              <text x="80" y="273" font-size="12.5" font-weight="650" fill="#0e3355">Data &amp; systems</text>
+              <text x="80" y="292" font-size="10.5" fill="#7e93a5">documents, records, systems of record</text>
+            </g>
+
+            <!-- right -->
+            <g>
+              <rect x="810" y="30" width="206" height="64" rx="10" fill="#f1f9f8" stroke="#c6e7e4"/>
+              <text x="826" y="53" font-size="12.5" font-weight="650" fill="#0b6b69">Evidence</text>
+              <text x="826" y="72" font-size="10.5" fill="#5d7488">locator · quote · confidence</text>
+            </g>
+            <g>
+              <rect x="810" y="140" width="206" height="64" rx="10" fill="#f1f9f8" stroke="#c6e7e4"/>
+              <text x="826" y="163" font-size="12.5" font-weight="650" fill="#0b6b69">Value &amp; outcome</text>
+              <text x="826" y="182" font-size="10.5" fill="#5d7488">lever · KPI · impact · priority</text>
+            </g>
+            <g>
+              <rect x="810" y="250" width="206" height="64" rx="10" fill="#f1f9f8" stroke="#c6e7e4"/>
+              <text x="826" y="273" font-size="12.5" font-weight="650" fill="#0b6b69">Provenance</text>
+              <text x="826" y="292" font-size="10.5" fill="#5d7488">run · model · prompt · source hashes</text>
+            </g>
+          </svg>
+          <figcaption><b>Figure 1.</b> Model anatomy. A graph without evidence is a guess; a graph without value is a drawing; a graph without provenance cannot be reproduced.</figcaption>
+        </figure>
+
+        <h3 class="sub">Essential shape — condensed example</h3>
+        <pre class="code"><span class="c">// Abridged CPM document. Full sample: samples/cpm-invoice-to-cash.json</span>
+{
+  <span class="k">"schemaVersion"</span>: <span class="s">"1.0.0"</span>,
+  <span class="k">"id"</span>: <span class="s">"prc_01J8Q4Z9K2"</span>,  <span class="k">"version"</span>: <span class="n">3</span>,  <span class="k">"status"</span>: <span class="s">"approved"</span>,
+  <span class="k">"name"</span>: <span class="s">"Invoice to Cash"</span>,  <span class="k">"domain"</span>: <span class="s">"Finance"</span>,
+  <span class="k">"scope"</span>: { <span class="k">"trigger"</span>: <span class="s">"Invoice request received"</span>, <span class="k">"outcome"</span>: <span class="s">"Cash collected"</span> },
+
+  <span class="k">"lanes"</span>: [
+    { <span class="k">"id"</span>: <span class="s">"lane_customer"</span>, <span class="k">"name"</span>: <span class="s">"Customer"</span>, <span class="k">"type"</span>: <span class="s">"external"</span> },
+    { <span class="k">"id"</span>: <span class="s">"lane_finance"</span>,  <span class="k">"name"</span>: <span class="s">"Finance"</span>,  <span class="k">"type"</span>: <span class="s">"internal"</span> }
+  ],
+
+  <span class="k">"nodes"</span>: [{
+    <span class="k">"id"</span>: <span class="s">"n_issue_invoice"</span>, <span class="k">"type"</span>: <span class="s">"serviceTask"</span>,
+    <span class="k">"name"</span>: <span class="s">"Issue invoice"</span>, <span class="k">"laneId"</span>: <span class="s">"lane_finance"</span>,
+    <span class="k">"confidence"</span>: <span class="n">0.94</span>,
+    <span class="k">"evidence"</span>: [{
+      <span class="k">"sourceId"</span>: <span class="s">"src_9f2a"</span>,
+      <span class="k">"locator"</span>: { <span class="k">"kind"</span>: <span class="s">"page"</span>, <span class="k">"page"</span>: <span class="n">4</span>, <span class="k">"bbox"</span>: [<span class="n">412</span>, <span class="n">268</span>, <span class="n">548</span>, <span class="n">302</span>] },
+      <span class="k">"quote"</span>: <span class="s">"Finance issues the invoice within 24 hours"</span>,
+      <span class="k">"confidence"</span>: <span class="n">0.91</span>
+    }]
+  }],
+
+  <span class="k">"edges"</span>: [{ <span class="k">"id"</span>: <span class="s">"e_17"</span>, <span class="k">"from"</span>: <span class="s">"n_confirm_order"</span>, <span class="k">"to"</span>: <span class="s">"n_issue_invoice"</span> }],
+
+  <span class="k">"value"</span>: {
+    <span class="k">"lever"</span>: [<span class="s">"cycleTime"</span>, <span class="s">"cost"</span>],
+    <span class="k">"outcome"</span>: { <span class="k">"statement"</span>: <span class="s">"Reduce DSO from 48 to 38 days"</span>,
+                 <span class="k">"kpi"</span>: <span class="s">"DSO"</span>, <span class="k">"baseline"</span>: <span class="n">48</span>, <span class="k">"target"</span>: <span class="n">38</span>, <span class="k">"unit"</span>: <span class="s">"days"</span> },
+    <span class="k">"impact"</span>: { <span class="k">"annualisedUsd"</span>: <span class="n">230000</span>, <span class="k">"confidence"</span>: <span class="n">0.72</span>, <span class="k">"assumptions"</span>: [<span class="s">"AR base $40M"</span>, <span class="s">"WACC 12%"</span>] }
+  },
+
+  <span class="k">"provenance"</span>: { <span class="k">"runId"</span>: <span class="s">"run_7c1e"</span>, <span class="k">"promptVersion"</span>: <span class="s">"extract@1.4.0"</span>,
+                  <span class="k">"temperature"</span>: <span class="n">0</span>, <span class="k">"sourceHashes"</span>: [<span class="s">"sha256:6b1…"</span>, <span class="s">"sha256:af0…"</span>] }
+}</pre>
+
+        <div class="callout">
+          <p><b>Schema authority.</b> The CPM is the only artefact from which a brief, a step table or a BPMN file may be generated. Projections are regenerated; the model is never reconstructed from them.</p>
+        </div>
+      </section>
+
+      <!-- ============ EXT ============ -->
+      <section class="block" id="req-ext">
+        <h2 class="sec"><span class="num">03</span>Extraction requirements</h2>
+        <p class="section-intro">Fifteen requirements covering intake, interpretation and the evidence contract. <span class="pill pill--ext">REQ-EXT</span></p>
+
+        <div class="tablewrap">
+          <table class="tbl">
+            <thead><tr><th style="width:13%">ID</th><th style="width:39%">Requirement</th><th>Acceptance criteria</th><th style="width:11%">Use case</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="id"><span class="rid">REQ-EXT-01</span></td>
+                <td><b>Multimodal intake.</b> The system shall accept PDF, PNG, JPG, DOCX, Markdown, plain text, source-code archives and repositories, video (MP4/MOV) and BPMN 2.0 XML as process sources.</td>
+                <td>Each accepted type produces a source record; an unsupported type is rejected with a list of supported formats; no job is created for a rejected source.</td>
+                <td><a class="chip chip--uc" href="#uc-01">UC-01</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-EXT-02</span></td>
+                <td><b>Source integrity.</b> The system shall store a SHA-256 hash of every source and link every derived artefact to that hash.</td>
+                <td>Hash is displayed in the source record; re-uploading identical bytes links to the existing source instead of creating a duplicate; deleting a derived artefact never alters the source.</td>
+                <td><a class="chip chip--uc" href="#uc-01">UC-01</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-EXT-03</span></td>
+                <td><b>Activity extraction.</b> The system shall identify activities and normalise each to a verb–object name with an owning lane and, where stated, inputs, outputs and systems.</td>
+                <td>Every activity has a name, lane and at least one evidence locator; synonyms of the same activity are merged; activity F1 ≥ 0.85 on the golden corpus.</td>
+                <td><a class="chip chip--uc" href="#uc-01">UC-01</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-EXT-04</span></td>
+                <td><b>Actor and lane extraction.</b> The system shall identify roles, departments and external parties and assign every node to exactly one lane.</td>
+                <td>No node is lane-less; actors with the same meaning are normalised to one lane; actor F1 ≥ 0.80 on the golden corpus.</td>
+                <td><a class="chip chip--uc" href="#uc-01">UC-01</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-EXT-05</span></td>
+                <td><b>Gateway extraction.</b> The system shall identify decision points, classify them as exclusive, parallel or inclusive, and capture conditions verbatim where the source states them.</td>
+                <td>Each outgoing flow has either a condition or is marked default; parallel gateways appear only where concurrency is explicit; gateway F1 ≥ 0.75.</td>
+                <td><a class="chip chip--uc" href="#uc-01">UC-01</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-EXT-06</span></td>
+                <td><b>Event extraction.</b> The system shall identify start, intermediate and end events and type them (message, timer, error) only where the source evidences the type.</td>
+                <td>Every process has at least one start and one end event; an untyped intermediate event is permitted; no event exists without a connecting flow.</td>
+                <td><a class="chip chip--uc" href="#uc-01">UC-01</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-EXT-07</span></td>
+                <td><b>Data and system extraction.</b> The system shall extract named documents, records and systems of record, attaching each to the task that produces or consumes it.</td>
+                <td>Unresolved references are listed as open questions rather than silently dropped; each system is linked to at least one task.</td>
+                <td><a class="chip chip--uc" href="#uc-03">UC-03</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-EXT-08</span></td>
+                <td><b>Evidence binding.</b> The system shall bind every flow element to at least one locator (PDF page and bounding box, image region, file and line range, or video timecode), the verbatim quote, and a confidence value.</td>
+                <td>Validation fails if any flow node lacks a locator; 100% of nodes in an approved model resolve to a source location; the quote is retrievable without re-parsing the source.</td>
+                <td><a class="chip chip--uc" href="#uc-01">UC-01</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-EXT-09</span></td>
+                <td><b>Diagram interpretation.</b> The system shall interpret swimlanes, boxes, decision diamonds, arrows and labels in raster and vector diagrams, using OCR when no text layer exists.</td>
+                <td>Swimlane boundaries and arrows are recovered on the golden diagram set; unreadable regions are reported with their bounding boxes; OCR confidence is propagated to elements.</td>
+                <td><a class="chip chip--uc" href="#uc-02">UC-02</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-EXT-10</span></td>
+                <td><b>Code interpretation.</b> The system shall detect process-bearing constructs in source code — request handlers, queue consumers, schedulers, state machines, status enumerations, BPMN/DMN files and API descriptions — and map them to process elements.</td>
+                <td>A detected construct cites <code>file:line</code>; a scheduled job is typed as a timer-triggered activity; an enumeration branch becomes a gateway condition.</td>
+                <td><a class="chip chip--uc" href="#uc-03">UC-03</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-EXT-11</span></td>
+                <td><b>Video interpretation.</b> The system shall transcribe speech with timestamps and speaker labels, and read on-screen content from sampled keyframes.</td>
+                <td>Each activity derived from speech carries a timecode accurate to ±5 seconds and a speaker label; on-screen text is captured where legible; illegible frames are flagged.</td>
+                <td><a class="chip chip--uc" href="#uc-04">UC-04</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-EXT-12</span></td>
+                <td><b>Cross-source fusion.</b> The system shall merge equivalent elements across sources and record disagreements as findings, each retaining both citations.</td>
+                <td>Duplicate activities from two sources collapse to one element with two evidence entries; an actor mismatch is reported as a conflict, not resolved silently.</td>
+                <td><a class="chip chip--uc" href="#uc-05">UC-05</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-EXT-13</span></td>
+                <td><b>Extraction modes.</b> The system shall support full discovery, incremental extraction from newly added sources, and targeted questions about a specific process.</td>
+                <td>An incremental run does not invalidate untouched elements; a targeted answer cites only in-scope evidence and declines questions outside the process boundary.</td>
+                <td><a class="chip chip--uc" href="#uc-06">UC-06</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-EXT-14</span></td>
+                <td><b>No unsupported assertions.</b> The system shall place any element that cannot be evidenced into a candidate list with a reason, and shall never promote it to the model automatically.</td>
+                <td>Unsupported-claim rate ≤ 3% on the golden corpus; every candidate states why evidence was insufficient; instruction-like text inside a source document cannot alter extraction behaviour.</td>
+                <td><a class="chip chip--uc" href="#uc-07">UC-07</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-EXT-15</span></td>
+                <td><b>Reproducibility.</b> The system shall reproduce a model from the same sources, prompt version, parameters and seed, and store the run manifest with the model.</td>
+                <td>Re-running with identical inputs yields an identical model excluding timestamps, job IDs and generation order; the manifest records source hashes, prompt version, parameters and seed.</td>
+                <td><a class="chip chip--uc" href="#uc-16">UC-16</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ VAL ============ -->
+      <section class="block" id="req-val">
+        <h2 class="sec"><span class="num">04</span>Business value requirements</h2>
+        <p class="section-intro">Six requirements defining the typed value block. Figures are derived from stored inputs; assumptions are explicit fields. <span class="pill pill--ext">REQ-VAL</span></p>
+
+        <div class="tablewrap">
+          <table class="tbl">
+            <thead><tr><th style="width:13%">ID</th><th style="width:39%">Requirement</th><th>Acceptance criteria</th><th style="width:11%">Use case</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="id"><span class="rid">REQ-VAL-01</span></td>
+                <td><b>Value lever classification.</b> The system shall classify each process against a fixed set of levers: cost, revenue, risk, compliance, customer experience and cycle time.</td>
+                <td>Exactly one primary lever and zero or more secondary levers are recorded; every approved process has a primary lever; classification is 100% within the fixed vocabulary.</td>
+                <td><a class="chip chip--uc" href="#uc-14">UC-14</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-VAL-02</span></td>
+                <td><b>Outcome statement.</b> The system shall express each outcome as baseline → target, measured by a named KPI, within a stated horizon.</td>
+                <td>All four fields are present or explicitly marked as an assumption; a missing baseline is never rendered as a number.</td>
+                <td><a class="chip chip--uc" href="#uc-14">UC-14</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-VAL-03</span></td>
+                <td><b>KPI capture.</b> The system shall capture metric name, unit, baseline, target and the evidence that supports each value.</td>
+                <td>Each KPI value resolves to a citation or is flagged as an assumption; units are consistent per KPI across the portfolio.</td>
+                <td><a class="chip chip--uc" href="#uc-14">UC-14</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-VAL-04</span></td>
+                <td><b>Impact estimate.</b> The system shall produce an annualised impact estimate with its method and assumptions, and shall not report precision beyond its inputs.</td>
+                <td>The estimate is recomputable from stored inputs; rounding follows the weakest input; a missing input suppresses the estimate rather than defaulting silently.</td>
+                <td><a class="chip chip--uc" href="#uc-14">UC-14</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-VAL-05</span></td>
+                <td><b>Automation potential and priority.</b> The system shall score automation potential and compute a priority score from a versioned, explainable formula.</td>
+                <td>Every score has a rationale and contributory inputs; the formula version is stored; recalculating with the same inputs produces the same ranking.</td>
+                <td><a class="chip chip--uc" href="#uc-14">UC-14</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-VAL-06</span></td>
+                <td><b>No silent value gap.</b> The system shall require every approved process to carry an outcome or an explicit "no quantified outcome" marker with a reason.</td>
+                <td>Approval is blocked when neither is present; the marker is visible in the catalogue and in exports.</td>
+                <td><a class="chip chip--uc" href="#uc-14">UC-14</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ DOC ============ -->
+      <section class="block" id="req-doc">
+        <h2 class="sec"><span class="num">05</span>Documentation requirements</h2>
+        <p class="section-intro">Ten requirements covering persistence, the narrative brief, tabular documentation and document-level traceability. <span class="pill pill--doc">REQ-DOC</span></p>
+
+        <div class="tablewrap">
+          <table class="tbl">
+            <thead><tr><th style="width:13%">ID</th><th style="width:39%">Requirement</th><th>Acceptance criteria</th><th style="width:11%">Use case</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="id"><span class="rid">REQ-DOC-01</span></td>
+                <td><b>Canonical JSON model.</b> The system shall persist every process as a JSON document validated against a published schema, with stable element identifiers.</td>
+                <td>Schema validation passes before persistence; identifiers survive version changes and export/import; unknown fields are rejected with a path to the offending property.</td>
+                <td><a class="chip chip--uc" href="#uc-08">UC-08</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-DOC-02</span></td>
+                <td><b>Immutable versioning.</b> The system shall create an immutable snapshot on every save and maintain a current-version pointer.</td>
+                <td>Historical versions cannot be modified or deleted; restoring a version creates a new version rather than rewriting history.</td>
+                <td><a class="chip chip--uc" href="#uc-08">UC-08</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-DOC-03</span></td>
+                <td><b>Process brief.</b> The system shall generate a brief containing purpose, trigger, scope, business outcome, actors, step summary, exceptions, controls, systems, KPIs, risks and open questions.</td>
+                <td>All sections are present; the brief is at most two pages at default typography; an empty section states why it is empty.</td>
+                <td><a class="chip chip--uc" href="#uc-09">UC-09</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-DOC-04</span></td>
+                <td><b>Step table and RACI.</b> The system shall produce a tabular view with one row per process node, including owner, RACI assignment, system, inputs, outputs and control.</td>
+                <td>Row count equals node count; every row carries a stable element ID; CSV export preserves column order and quoting.</td>
+                <td><a class="chip chip--uc" href="#uc-10">UC-10</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-DOC-05</span></td>
+                <td><b>Assumptions and open questions.</b> The system shall maintain registers of assumptions and open questions with owner and status.</td>
+                <td>Every inferred value appears in the assumption register; unresolved evidence gaps appear as open questions; an empty register requires explicit confirmation.</td>
+                <td><a class="chip chip--uc" href="#uc-09">UC-09</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-DOC-06</span></td>
+                <td><b>Business outcome section.</b> The system shall include outcome, KPI, impact estimate and confidence in every process document.</td>
+                <td>The section is generated from the value block, not authored separately; a change in the model is reflected on regeneration.</td>
+                <td><a class="chip chip--uc" href="#uc-09">UC-09</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-DOC-07</span></td>
+                <td><b>Document export.</b> The system shall export documentation to Markdown, HTML, PDF and DOCX with consistent structure and citations rendered as an appendix.</td>
+                <td>All formats render the same section order; footnote numbering matches the appendix; no broken citations in any format.</td>
+                <td><a class="chip chip--uc" href="#uc-09">UC-09</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-DOC-08</span></td>
+                <td><b>Statement traceability.</b> The system shall link every generated statement in a document to the model element or elements that support it.</td>
+                <td>An orphan statement blocks publication; hovering a citation reveals the element ID and source locator.</td>
+                <td><a class="chip chip--uc" href="#uc-09">UC-09</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-DOC-09</span></td>
+                <td><b>Documentation diff.</b> The system shall compare two versions and show added, removed and changed steps, owners, KPIs and evidence.</td>
+                <td>Every change is categorised; unchanged content is visually de-emphasised; a diff can be exported.</td>
+                <td><a class="chip chip--uc" href="#uc-13">UC-13</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-DOC-10</span></td>
+                <td><b>Human edit provenance.</b> The system shall mark human edits as human, retain the original extracted value, and record author, time and reason.</td>
+                <td>No edit overwrites the original value; an approved version is read-only; reverting an edit restores the extracted value exactly.</td>
+                <td><a class="chip chip--uc" href="#uc-07">UC-07</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ VIZ ============ -->
+      <section class="block" id="req-viz">
+        <h2 class="sec"><span class="num">06</span>Visualization requirements</h2>
+        <p class="section-intro">Twelve requirements covering BPMN validity, layout, the interactive canvas, evidence overlays and accessibility. <span class="pill pill--viz">REQ-VIZ</span></p>
+
+        <div class="tablewrap">
+          <table class="tbl">
+            <thead><tr><th style="width:13%">ID</th><th style="width:39%">Requirement</th><th>Acceptance criteria</th><th style="width:11%">Use case</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="id"><span class="rid">REQ-VIZ-01</span></td>
+                <td><b>BPMN 2.0 validity.</b> The system shall produce BPMN 2.0 XML that is schema-valid and semantically valid before any export.</td>
+                <td>Zero schema errors and zero semantic errors (for example, a gateway with one outgoing flow) at export time; invalid models are blocked with element-level messages.</td>
+                <td><a class="chip chip--uc" href="#uc-11">UC-11</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-VIZ-02</span></td>
+                <td><b>Deterministic layout.</b> The system shall lay out diagrams automatically with ordered lanes, a left-to-right flow and no overlapping nodes or edge labels.</td>
+                <td>Repeated layout of the same model is identical; zero node overlaps across the layout corpus; lane order follows the model.</td>
+                <td><a class="chip chip--uc" href="#uc-11">UC-11</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-VIZ-03</span></td>
+                <td><b>Notation mapping.</b> The system shall map model elements to BPMN per the published notation policy, demoting unmappable content to annotations rather than dropping it.</td>
+                <td>No model element disappears between model and diagram; demoted content is visible as an annotation and counted in the mapping report.</td>
+                <td><a class="chip chip--uc" href="#uc-11">UC-11</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-VIZ-04</span></td>
+                <td><b>Round-trip.</b> The system shall export BPMN that opens in at least two independent modelers, and shall re-import edited BPMN preserving identifiers and evidence extensions.</td>
+                <td>No import errors in bpmn.io and Camunda Modeler; element IDs unchanged after round-trip; evidence extension elements survive the cycle.</td>
+                <td><a class="chip chip--uc" href="#uc-11">UC-11</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-VIZ-05</span></td>
+                <td><b>Interactive canvas.</b> The system shall provide pan, zoom, fit-to-view, minimap, in-diagram search and collapsible lanes.</td>
+                <td>All controls are operable by mouse and keyboard; the current viewport survives a selection change; collapse/expand preserves the model.</td>
+                <td><a class="chip chip--uc" href="#uc-12">UC-12</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-VIZ-06</span></td>
+                <td><b>Evidence overlay.</b> The system shall indicate evidence per node and reveal the citation card with the source at the exact locator when the node is selected.</td>
+                <td>Selecting a node shows its locator; selecting the citation opens the PDF at the page with the region highlighted, the video at the timecode, or the code at the line range.</td>
+                <td><a class="chip chip--uc" href="#uc-12">UC-12</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-VIZ-07</span></td>
+                <td><b>Node inspector.</b> The system shall show activity details, owner, systems, inputs, outputs, confidence, evidence and value contribution for the selected node.</td>
+                <td>Every displayed field comes from the model; low confidence is visually distinct; edits from the inspector follow REQ-DOC-10.</td>
+                <td><a class="chip chip--uc" href="#uc-12">UC-12</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-VIZ-08</span></td>
+                <td><b>Value visualization.</b> The system shall overlay value, automation potential and risk on process steps and present a portfolio priority matrix.</td>
+                <td>Overlay values match the model values exactly; the matrix uses the stored priority score; a legend explains every encoding.</td>
+                <td><a class="chip chip--uc" href="#uc-14">UC-14</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-VIZ-09</span></td>
+                <td><b>Version comparison.</b> The system shall compare two versions side by side or as an overlay, highlighting inserted, removed and modified elements.</td>
+                <td>Each change type has a distinct encoding and a legend; selecting a change reveals both versions and the underlying evidence.</td>
+                <td><a class="chip chip--uc" href="#uc-13">UC-13</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-VIZ-10</span></td>
+                <td><b>Accessibility.</b> The system shall meet WCAG 2.2 AA for the diagram experience and expose every element through a text alternative.</td>
+                <td>Every node is reachable by keyboard; a screen-reader list presents actors, activities and flows in order; contrast meets AA; no information is conveyed by colour alone.</td>
+                <td><a class="chip chip--uc" href="#uc-12">UC-12</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-VIZ-11</span></td>
+                <td><b>Diagram performance.</b> The system shall render a 300-node, 15-lane model within two seconds and keep interaction responsive.</td>
+                <td>First meaningful render ≤ 2 s at reference hardware; pan and zoom ≥ 50 fps at p95; progressive detail for dense models.</td>
+                <td><a class="chip chip--uc" href="#uc-12">UC-12</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-VIZ-12</span></td>
+                <td><b>Image and print export.</b> The system shall export the diagram as PNG and SVG at 1× and 2× with a legend and without clipping.</td>
+                <td>Exported bounds contain every element; text remains selectable in SVG; the legend is included and print layout respects page margins.</td>
+                <td><a class="chip chip--uc" href="#uc-11">UC-11</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ MOD ============ -->
+      <section class="block" id="req-mod">
+        <h2 class="sec"><span class="num">07</span>Model &amp; API contract</h2>
+        <p class="section-intro">Six requirements that keep extraction, documentation and visualization connected by one contract. <span class="pill pill--ext">REQ-MOD</span></p>
+
+        <div class="tablewrap">
+          <table class="tbl">
+            <thead><tr><th style="width:13%">ID</th><th style="width:39%">Requirement</th><th>Acceptance criteria</th><th style="width:11%">Use case</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="id"><span class="rid">REQ-MOD-01</span></td>
+                <td><b>API surface.</b> The system shall expose REST resources for sources, extraction jobs, process models, versions, documentation, BPMN and exports, described by OpenAPI 3.1.</td>
+                <td>Every UI capability is available through the API; the published specification matches the running service in contract tests.</td>
+                <td><a class="chip chip--uc" href="#uc-01">UC-01</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-MOD-02</span></td>
+                <td><b>Asynchronous jobs.</b> The system shall return a job identifier immediately and report stage-level progress, including partial results on failure.</td>
+                <td>A submission returns without waiting for extraction; progress events identify the current stage; a failed job preserves successfully extracted elements.</td>
+                <td><a class="chip chip--uc" href="#uc-01">UC-01</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-MOD-03</span></td>
+                <td><b>Schema contract.</b> The system shall validate payloads against the published JSON Schema and reject incompatible changes without a major version.</td>
+                <td>Schema and specification are validated in the build; a breaking change without a version increment fails the build.</td>
+                <td><a class="chip chip--uc" href="#uc-08">UC-08</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-MOD-04</span></td>
+                <td><b>Error contract.</b> The system shall return errors in a consistent problem format with a machine-readable code, a human message and a correlation identifier.</td>
+                <td>Every 4xx and 5xx response validates against the problem schema; the correlation identifier appears in logs.</td>
+                <td><a class="chip chip--uc" href="#uc-01">UC-01</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-MOD-05</span></td>
+                <td><b>Search.</b> The system shall support semantic and keyword search across process models and evidence, returning cited snippets.</td>
+                <td>Results include the process, the matched element and a citation; p95 response ≤ 500 ms at reference dataset size.</td>
+                <td><a class="chip chip--uc" href="#uc-15">UC-15</a></td>
+              </tr>
+              <tr>
+                <td class="id"><span class="rid">REQ-MOD-06</span></td>
+                <td><b>Import and export.</b> The system shall export model JSON and BPMN with correct content types, and import BPMN with validation and a change report.</td>
+                <td>Round-trip import produces a change report rather than a silent overwrite; malformed files return a validation error listing offending elements.</td>
+                <td><a class="chip chip--uc" href="#uc-11">UC-11</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ GATES ============ -->
+      <section class="block" id="gates">
+        <h2 class="sec"><span class="num">08</span>Quality gates</h2>
+        <p class="section-intro">
+          These thresholds are normative: a release does not pass if any is missed. They are measured on a versioned
+          golden corpus, not on ad-hoc samples.
+        </p>
+
+        <div class="tablewrap">
+          <table class="tbl">
+            <thead><tr><th>ID</th><th>Gate</th><th>Threshold</th><th>Measured by</th></tr></thead>
+            <tbody>
+              <tr><td class="id"><span class="rid">QG-01</span></td><td>Activity extraction quality</td><td>F1 ≥ 0.85</td><td><a class="chip chip--tc" href="test-cases.html#tc-058">TC-058</a></td></tr>
+              <tr><td class="id"><span class="rid">QG-02</span></td><td>Gateway extraction quality</td><td>F1 ≥ 0.75</td><td><a class="chip chip--tc" href="test-cases.html#tc-058">TC-058</a></td></tr>
+              <tr><td class="id"><span class="rid">QG-03</span></td><td>Actor and lane extraction quality</td><td>F1 ≥ 0.80</td><td><a class="chip chip--tc" href="test-cases.html#tc-058">TC-058</a></td></tr>
+              <tr><td class="id"><span class="rid">QG-04</span></td><td>Evidence coverage</td><td>≥ 95% of elements cited</td><td><a class="chip chip--tc" href="test-cases.html#tc-059">TC-059</a></td></tr>
+              <tr><td class="id"><span class="rid">QG-05</span></td><td>Unsupported-claim rate</td><td>≤ 3%</td><td><a class="chip chip--tc" href="test-cases.html#tc-059">TC-059</a></td></tr>
+              <tr><td class="id"><span class="rid">QG-06</span></td><td>BPMN validity</td><td>100% schema and semantic validity</td><td><a class="chip chip--tc" href="test-cases.html#tc-040">TC-040</a></td></tr>
+              <tr><td class="id"><span class="rid">QG-07</span></td><td>Round-trip fidelity</td><td>100% identifier preservation</td><td><a class="chip chip--tc" href="test-cases.html#tc-043">TC-043</a></td></tr>
+              <tr><td class="id"><span class="rid">QG-08</span></td><td>Reproducibility</td><td>Identical model on re-run</td><td><a class="chip chip--tc" href="test-cases.html#tc-017">TC-017</a></td></tr>
+              <tr><td class="id"><span class="rid">QG-09</span></td><td>Time to first draft</td><td>&lt; 15 min for a 50-page pack</td><td><a class="chip chip--tc" href="test-cases.html#tc-060">TC-060</a></td></tr>
+              <tr><td class="id"><span class="rid">QG-10</span></td><td>SME acceptance</td><td>≥ 70% of elements accepted unchanged</td><td>Manual study — <a class="chip chip--tc" href="test-cases.html#tc-057">TC-057</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ USE CASES ============ -->
+      <section class="block" id="usecases">
+        <h2 class="sec"><span class="num">09</span>Use cases</h2>
+        <p class="section-intro">
+          Sixteen use cases describe how the requirements are exercised end to end. Each links to the requirements it
+          satisfies and the test cases that prove it.
+        </p>
+
+        <!-- UC-01 -->
+        <div class="uc" id="uc-01">
+          <div class="uc-head">
+            <span class="uid">UC-01</span>
+            <h3>Extract a process from a PDF process pack</h3>
+            <div class="pillrow"><span class="pill pill--ext">Extraction</span><span class="pill pill--p0">P0</span></div>
+          </div>
+          <div class="uc-body">
+            <dl class="uc-grid">
+              <dt>Primary actor</dt><dd>Process analyst</dd>
+              <dt>Goal</dt><dd>Obtain a structured, cited draft process model from a PDF containing narrative and a swimlane diagram.</dd>
+              <dt>Trigger</dt><dd>A discovery pack is received and needs to be turned into a model before a workshop.</dd>
+              <dt>Preconditions</dt><dd>A project exists; the PDF is readable and within size limits.</dd>
+              <dt>Postconditions</dt><dd>A draft CPM at version 1, an evidence index, and a confidence summary. Nothing is published.</dd>
+            </dl>
+            <h4 class="mini">Main flow</h4>
+            <ol class="flow">
+              <li>The analyst uploads the PDF and selects the full-discovery mode.</li>
+              <li>The system hashes the file, renders each page and detects a text layer.</li>
+              <li>The system extracts narrative steps, then interprets the swimlane diagram (lanes, boxes, diamonds, arrows).</li>
+              <li>Candidate elements are normalised and merged, and each is bound to a page and bounding box with a verbatim quote.</li>
+              <li>The system identifies actors, activities, gateways, events, data objects and systems, and assembles the graph.</li>
+              <li>The graph is validated against the model schema and the process is saved as a draft with a confidence summary.</li>
+              <li>The analyst opens the process workspace and reviews the lowest-confidence elements first.</li>
+            </ol>
+            <div class="alt">
+              <h4>Alternate flow — no text layer</h4>
+              <ol>
+                <li>At step 2 the system finds no text layer and switches to OCR.</li>
+                <li>OCR confidence below threshold is propagated to affected elements, which are marked for review.</li>
+                <li>The flow resumes at step 3; unreadable regions are reported with their bounding boxes.</li>
+              </ol>
+            </div>
+            <div class="uc-foot">
+              <span>Requirements</span>
+              <div class="links">
+                <a class="chip" href="#req-ext">REQ-EXT-01</a><a class="chip" href="#req-ext">02</a><a class="chip" href="#req-ext">03</a><a class="chip" href="#req-ext">04</a><a class="chip" href="#req-ext">05</a><a class="chip" href="#req-ext">06</a><a class="chip" href="#req-ext">08</a><a class="chip" href="#req-ext">09</a><a class="chip" href="#req-doc">REQ-DOC-01</a><a class="chip" href="#req-mod">REQ-MOD-02</a>
+              </div>
+              <span style="margin-left:auto">Tests</span>
+              <div class="links">
+                <a class="chip chip--tc" href="test-cases.html#tc-001">TC-001</a><a class="chip chip--tc" href="test-cases.html#tc-006">006</a><a class="chip chip--tc" href="test-cases.html#tc-008">008</a><a class="chip chip--tc" href="test-cases.html#tc-057">057</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- UC-02 -->
+        <div class="uc" id="uc-02">
+          <div class="uc-head">
+            <span class="uid">UC-02</span>
+            <h3>Extract a process from a scanned or photographed diagram</h3>
+            <div class="pillrow"><span class="pill pill--ext">Extraction</span><span class="pill pill--p0">P0</span></div>
+          </div>
+          <div class="uc-body">
+            <dl class="uc-grid">
+              <dt>Primary actor</dt><dd>Process analyst</dd>
+              <dt>Goal</dt><dd>Recover a model from a whiteboard photo or a scanned handout where no machine-readable text exists.</dd>
+              <dt>Trigger</dt><dd>A workshop produces a photo of a whiteboard that no one has transcribed.</dd>
+              <dt>Preconditions</dt><dd>The image is legible at thumbnail scale; the project exists.</dd>
+              <dt>Postconditions</dt><dd>A draft model with lower confidence, explicit unreadable regions and a review task.</dd>
+            </dl>
+            <h4 class="mini">Main flow</h4>
+            <ol class="flow">
+              <li>The analyst uploads the image and confirms the intended orientation.</li>
+              <li>The system runs OCR and layout analysis, detecting shapes, lanes and connector lines.</li>
+              <li>Text is associated with shapes; connectors are converted into sequence flows with direction.</li>
+              <li>Low-confidence text is marked, and the element is linked to its pixel region.</li>
+              <li>The draft is saved and the review queue is populated in confidence order.</li>
+            </ol>
+            <div class="alt">
+              <h4>Alternate flow — diagram not interpretable</h4>
+              <ol>
+                <li>If shape detection yields no usable graph, the system reports the failure instead of fabricating a model.</li>
+                <li>The analyst is offered the regions it could read and asked to supply a clearer source.</li>
+              </ol>
+            </div>
+            <div class="uc-foot">
+              <span>Requirements</span>
+              <div class="links">
+                <a class="chip" href="#req-ext">REQ-EXT-01</a><a class="chip" href="#req-ext">09</a><a class="chip" href="#req-ext">14</a>
+              </div>
+              <span style="margin-left:auto">Tests</span>
+              <div class="links"><a class="chip chip--tc" href="test-cases.html#tc-002">TC-002</a><a class="chip chip--tc" href="test-cases.html#tc-059">059</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- UC-03 -->
+        <div class="uc" id="uc-03">
+          <div class="uc-head">
+            <span class="uid">UC-03</span>
+            <h3>Extract the implemented process from a code repository</h3>
+            <div class="pillrow"><span class="pill pill--ext">Extraction</span><span class="pill pill--p1">P1</span></div>
+          </div>
+          <div class="uc-body">
+            <dl class="uc-grid">
+              <dt>Primary actor</dt><dd>Process analyst or engineer</dd>
+              <dt>Goal</dt><dd>Understand what the system actually does, with file-and-line evidence, independent of documentation.</dd>
+              <dt>Trigger</dt><dd>The documented process is suspected to differ from production behaviour.</dd>
+              <dt>Preconditions</dt><dd>A repository archive or URL is available and within size limits.</dd>
+              <dt>Postconditions</dt><dd>Service tasks, scheduled activities and branch conditions with code citations; no UI-derived elements invented.</dd>
+            </dl>
+            <h4 class="mini">Main flow</h4>
+            <ol class="flow">
+              <li>The analyst supplies a repository archive or URL and optional include/exclude paths.</li>
+              <li>The system inventories files and identifies process-bearing constructs.</li>
+              <li>Handlers, consumers and schedulers become service tasks; state machines and status enumerations become gateways and conditions.</li>
+              <li>Each element is bound to a <code>file:line</code> range and the relevant code excerpt.</li>
+              <li>The model is saved as a draft labelled "implemented view", distinguishable from a documented view.</li>
+            </ol>
+            <div class="alt">
+              <h4>Alternate flow — monorepo above limits</h4>
+              <ol>
+                <li>The system reports the size and suggests include/exclude scopes.</li>
+                <li>Extraction runs on the selected scope and records the scope in the run manifest.</li>
+              </ol>
+            </div>
+            <div class="uc-foot">
+              <span>Requirements</span>
+              <div class="links"><a class="chip" href="#req-ext">REQ-EXT-03</a><a class="chip" href="#req-ext">07</a><a class="chip" href="#req-ext">10</a><a class="chip" href="#req-ext">14</a></div>
+              <span style="margin-left:auto">Tests</span>
+              <div class="links"><a class="chip chip--tc" href="test-cases.html#tc-003">TC-003</a><a class="chip chip--tc" href="test-cases.html#tc-004">004</a><a class="chip chip--tc" href="test-cases.html#tc-013">013</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- UC-04 -->
+        <div class="uc" id="uc-04">
+          <div class="uc-head">
+            <span class="uid">UC-04</span>
+            <h3>Extract a process from a recorded workshop</h3>
+            <div class="pillrow"><span class="pill pill--ext">Extraction</span><span class="pill pill--p1">P1</span></div>
+          </div>
+          <div class="uc-body">
+            <dl class="uc-grid">
+              <dt>Primary actor</dt><dd>Process analyst</dd>
+              <dt>Goal</dt><dd>Capture the steps, actors and exceptions described verbally in a workshop, with timecoded evidence.</dd>
+              <dt>Trigger</dt><dd>A recorded SME session exists and no one has documented it.</dd>
+              <dt>Preconditions</dt><dd>Audio is intelligible; the recording is within duration limits.</dd>
+              <dt>Postconditions</dt><dd>Activities with speaker and timecode citations, plus on-screen content where visible.</dd>
+            </dl>
+            <h4 class="mini">Main flow</h4>
+            <ol class="flow">
+              <li>The analyst uploads the recording and confirms the language.</li>
+              <li>The system transcribes with timestamps and speaker labels, and samples keyframes.</li>
+              <li>Narrative steps are converted to activities and attached to the speaking actor's lane.</li>
+              <li>Exceptions and conditions stated verbally become gateways, marked as spoken evidence.</li>
+              <li>Each element is bound to a timecode range; the draft is saved.</li>
+            </ol>
+            <div class="alt">
+              <h4>Alternate flow — poor audio quality</h4>
+              <ol>
+                <li>Segments below an intelligibility threshold are excluded rather than guessed.</li>
+                <li>The affected time ranges are reported so the analyst can re-record or confirm manually.</li>
+              </ol>
+            </div>
+            <div class="uc-foot">
+              <span>Requirements</span>
+              <div class="links"><a class="chip" href="#req-ext">REQ-EXT-03</a><a class="chip" href="#req-ext">04</a><a class="chip" href="#req-ext">11</a></div>
+              <span style="margin-left:auto">Tests</span>
+              <div class="links"><a class="chip chip--tc" href="test-cases.html#tc-005">TC-005</a><a class="chip chip--tc" href="test-cases.html#tc-014">014</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- UC-05 -->
+        <div class="uc" id="uc-05">
+          <div class="uc-head">
+            <span class="uid">UC-05</span>
+            <h3>Fuse sources and resolve conflicts</h3>
+            <div class="pillrow"><span class="pill pill--ext">Extraction</span><span class="pill pill--p0">P0</span></div>
+          </div>
+          <div class="uc-body">
+            <dl class="uc-grid">
+              <dt>Primary actor</dt><dd>Process analyst</dd>
+              <dt>Goal</dt><dd>Produce one process model from a document, a recording and code, with disagreements made explicit.</dd>
+              <dt>Trigger</dt><dd>More than one source describes the same process.</dd>
+              <dt>Preconditions</dt><dd>At least two sources are ingested for the same process scope.</dd>
+              <dt>Postconditions</dt><dd>A merged model, a conflict register with dual citations, and recorded resolutions.</dd>
+            </dl>
+            <h4 class="mini">Main flow</h4>
+            <ol class="flow">
+              <li>The analyst selects the sources to fuse and the process scope.</li>
+              <li>The system matches equivalent lanes, activities, gateways and events across sources.</li>
+              <li>Matched elements are merged, with each source retaining its own citation.</li>
+              <li>Unmatched or contradictory elements are raised as findings with a category and both citations.</li>
+              <li>The analyst accepts, rejects or annotates each finding; the decision is recorded against the element.</li>
+            </ol>
+            <div class="alt">
+              <h4>Alternate flow — irreconcilable scope</h4>
+              <ol>
+                <li>If sources describe genuinely different processes, the system proposes separate models rather than forcing a merge.</li>
+                <li>The analyst confirms the split; both models retain their original evidence.</li>
+              </ol>
+            </div>
+            <div class="uc-foot">
+              <span>Requirements</span>
+              <div class="links"><a class="chip" href="#req-ext">REQ-EXT-12</a><a class="chip" href="#req-ext">13</a><a class="chip" href="#req-doc">REQ-DOC-03</a></div>
+              <span style="margin-left:auto">Tests</span>
+              <div class="links"><a class="chip chip--tc" href="test-cases.html#tc-025">TC-025</a><a class="chip chip--tc" href="test-cases.html#tc-026">026</a><a class="chip chip--tc" href="test-cases.html#tc-027">027</a><a class="chip chip--tc" href="test-cases.html#tc-028">028</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- UC-06 -->
+        <div class="uc" id="uc-06">
+          <div class="uc-head">
+            <span class="uid">UC-06</span>
+            <h3>Ask a targeted question about a process</h3>
+            <div class="pillrow"><span class="pill pill--ext">Extraction</span><span class="pill pill--p1">P1</span></div>
+          </div>
+          <div class="uc-body">
+            <dl class="uc-grid">
+              <dt>Primary actor</dt><dd>Process analyst or SME</dd>
+              <dt>Goal</dt><dd>Answer a narrow question — "what happens when payment fails?" — using only the evidence in scope.</dd>
+              <dt>Trigger</dt><dd>A review raises a specific question that the current model does not answer.</dd>
+              <dt>Preconditions</dt><dd>The process and its sources exist.</dd>
+              <dt>Postconditions</dt><dd>A cited answer plus candidate elements, or an explicit "not evidenced" response.</dd>
+            </dl>
+            <h4 class="mini">Main flow</h4>
+            <ol class="flow">
+              <li>The analyst asks a question scoped to one process.</li>
+              <li>The system retrieves only evidence within that process boundary.</li>
+              <li>It answers with citations and proposes any new elements as candidates.</li>
+              <li>The analyst accepts candidates into the model or discards them.</li>
+            </ol>
+            <div class="alt">
+              <h4>Alternate flow — out of scope or not evidenced</h4>
+              <ol>
+                <li>If the question falls outside the boundary, the system declines and states the boundary.</li>
+                <li>If evidence is insufficient, it says so and lists what would be needed.</li>
+              </ol>
+            </div>
+            <div class="uc-foot">
+              <span>Requirements</span>
+              <div class="links"><a class="chip" href="#req-ext">REQ-EXT-08</a><a class="chip" href="#req-ext">13</a><a class="chip" href="#req-ext">14</a></div>
+              <span style="margin-left:auto">Tests</span>
+              <div class="links"><a class="chip chip--tc" href="test-cases.html#tc-015">TC-015</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- UC-07 -->
+        <div class="uc" id="uc-07">
+          <div class="uc-head">
+            <span class="uid">UC-07</span>
+            <h3>Review and correct a draft process</h3>
+            <div class="pillrow"><span class="pill pill--viz">Review</span><span class="pill pill--p0">P0</span></div>
+          </div>
+          <div class="uc-body">
+            <dl class="uc-grid">
+              <dt>Primary actor</dt><dd>Process analyst, then subject-matter expert</dd>
+              <dt>Goal</dt><dd>Correct errors efficiently by working from the lowest-confidence elements and their citations.</dd>
+              <dt>Trigger</dt><dd>A draft model is ready for review.</dd>
+              <dt>Preconditions</dt><dd>The draft has a confidence summary and an evidence index.</dd>
+              <dt>Postconditions</dt><dd>A corrected draft with human provenance recorded for every change.</dd>
+            </dl>
+            <h4 class="mini">Main flow</h4>
+            <ol class="flow">
+              <li>The system presents elements ordered by confidence, lowest first, and a review queue.</li>
+              <li>The analyst opens an element, sees its citation and either accepts or edits it.</li>
+              <li>Edits record author, time, reason and the original extracted value.</li>
+              <li>Unsupported content is shown as a candidate and is not promoted without confirmation.</li>
+              <li>The review status is saved; accepted elements are removed from the queue.</li>
+            </ol>
+            <div class="alt">
+              <h4>Alternate flow — evidence is wrong</h4>
+              <ol>
+                <li>The analyst rejects the citation, which flags the source region as unreliable.</li>
+                <li>The element returns to candidate status rather than remaining in the model.</li>
+              </ol>
+            </div>
+            <div class="uc-foot">
+              <span>Requirements</span>
+              <div class="links"><a class="chip" href="#req-ext">REQ-EXT-08</a><a class="chip" href="#req-ext">14</a><a class="chip" href="#req-doc">REQ-DOC-10</a><a class="chip" href="#req-viz">REQ-VIZ-06</a></div>
+              <span style="margin-left:auto">Tests</span>
+              <div class="links"><a class="chip chip--tc" href="test-cases.html#tc-012">TC-012</a><a class="chip chip--tc" href="test-cases.html#tc-016">016</a><a class="chip chip--tc" href="test-cases.html#tc-032">032</a><a class="chip chip--tc" href="test-cases.html#tc-034">034</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- UC-08 -->
+        <div class="uc" id="uc-08">
+          <div class="uc-head">
+            <span class="uid">UC-08</span>
+            <h3>Approve and publish a process version</h3>
+            <div class="pillrow"><span class="pill pill--doc">Governance</span><span class="pill pill--p0">P0</span></div>
+          </div>
+          <div class="uc-body">
+            <dl class="uc-grid">
+              <dt>Primary actor</dt><dd>Process owner</dd>
+              <dt>Goal</dt><dd>Turn a reviewed draft into an immutable, approved version that documentation and diagrams can reference.</dd>
+              <dt>Trigger</dt><dd>Review is complete and findings are resolved or accepted.</dd>
+              <dt>Preconditions</dt><dd>Model schema-valid; no blocking open questions; value section present or explicitly marked.</dd>
+              <dt>Postconditions</dt><dd>An immutable approved version and a current-version pointer; previous versions remain readable.</dd>
+            </dl>
+            <h4 class="mini">Main flow</h4>
+            <ol class="flow">
+              <li>The owner reviews the readiness checklist: schema, evidence, value, conflicts.</li>
+              <li>The system blocks approval if a required check fails and names the offending elements.</li>
+              <li>The owner approves and supplies a rationale.</li>
+              <li>The system writes an immutable snapshot and moves the current pointer.</li>
+              <li>The approved version becomes the basis for documents, BPMN export and comparison.</li>
+            </ol>
+            <div class="alt">
+              <h4>Alternate flow — approval after changes</h4>
+              <ol>
+                <li>If the model changes after approval, a new draft is created.</li>
+                <li>The approved version remains untouched; the draft is diffed against it.</li>
+              </ol>
+            </div>
+            <div class="uc-foot">
+              <span>Requirements</span>
+              <div class="links"><a class="chip" href="#req-doc">REQ-DOC-01</a><a class="chip" href="#req-doc">02</a><a class="chip" href="#req-viz">REQ-VIZ-01</a><a class="chip" href="#req-val">REQ-VAL-06</a></div>
+              <span style="margin-left:auto">Tests</span>
+              <div class="links"><a class="chip chip--tc" href="test-cases.html#tc-029">TC-029</a><a class="chip chip--tc" href="test-cases.html#tc-030">030</a><a class="chip chip--tc" href="test-cases.html#tc-033">033</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- UC-09 -->
+        <div class="uc" id="uc-09">
+          <div class="uc-head">
+            <span class="uid">UC-09</span>
+            <h3>Generate the process brief and registers</h3>
+            <div class="pillrow"><span class="pill pill--doc">Documentation</span><span class="pill pill--p0">P0</span></div>
+          </div>
+          <div class="uc-body">
+            <dl class="uc-grid">
+              <dt>Primary actor</dt><dd>Process owner or analyst</dd>
+              <dt>Goal</dt><dd>Produce a one-page brief plus assumptions and open-questions registers that stakeholders can circulate.</dd>
+              <dt>Trigger</dt><dd>A model is approved, or a draft is needed for a steering meeting.</dd>
+              <dt>Preconditions</dt><dd>The model exists and its value block is populated.</dd>
+              <dt>Postconditions</dt><dd>A document pack with citations, exportable in four formats.</dd>
+            </dl>
+            <h4 class="mini">Main flow</h4>
+            <ol class="flow">
+              <li>The user requests a brief and selects a version.</li>
+              <li>The system assembles sections from the model, never re-summarising the sources.</li>
+              <li>Each statement is linked to its element IDs and citations.</li>
+              <li>Assumptions and open questions are rendered from the registers.</li>
+              <li>The user previews, then exports to Markdown, HTML, PDF or DOCX.</li>
+            </ol>
+            <div class="alt">
+              <h4>Alternate flow — missing KPI</h4>
+              <ol>
+                <li>Where no quantified outcome exists, the brief states "no quantified outcome" and links the reason.</li>
+                <li>The section is never filled with an invented figure.</li>
+              </ol>
+            </div>
+            <div class="uc-foot">
+              <span>Requirements</span>
+              <div class="links"><a class="chip" href="#req-doc">REQ-DOC-03</a><a class="chip" href="#req-doc">05</a><a class="chip" href="#req-doc">06</a><a class="chip" href="#req-doc">07</a><a class="chip" href="#req-doc">08</a></div>
+              <span style="margin-left:auto">Tests</span>
+              <div class="links"><a class="chip chip--tc" href="test-cases.html#tc-035">TC-035</a><a class="chip chip--tc" href="test-cases.html#tc-037">037</a><a class="chip chip--tc" href="test-cases.html#tc-038">038</a><a class="chip chip--tc" href="test-cases.html#tc-039">039</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- UC-10 -->
+        <div class="uc" id="uc-10">
+          <div class="uc-head">
+            <span class="uid">UC-10</span>
+            <h3>Generate the step table and RACI export</h3>
+            <div class="pillrow"><span class="pill pill--doc">Documentation</span><span class="pill pill--p1">P1</span></div>
+          </div>
+          <div class="uc-body">
+            <dl class="uc-grid">
+              <dt>Primary actor</dt><dd>Process analyst</dd>
+              <dt>Goal</dt><dd>Produce a governance-ready table of steps, owners and controls that matches the model exactly.</dd>
+              <dt>Trigger</dt><dd>A client's operating-model template requires a tabular artefact.</dd>
+              <dt>Preconditions</dt><dd>The model has lanes and activities.</dd>
+              <dt>Postconditions</dt><dd>CSV and in-document tables with one row per node and stable IDs.</dd>
+            </dl>
+            <h4 class="mini">Main flow</h4>
+            <ol class="flow">
+              <li>The user opens the step table from the process workspace.</li>
+              <li>The system renders one row per node with owner, RACI, system, inputs, outputs and control.</li>
+              <li>The user reorders columns or hides optional fields.</li>
+              <li>The system exports CSV and embeds the table in the document pack.</li>
+            </ol>
+            <div class="uc-foot">
+              <span>Requirements</span>
+              <div class="links"><a class="chip" href="#req-doc">REQ-DOC-04</a><a class="chip" href="#req-doc">07</a></div>
+              <span style="margin-left:auto">Tests</span>
+              <div class="links"><a class="chip chip--tc" href="test-cases.html#tc-036">TC-036</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- UC-11 -->
+        <div class="uc" id="uc-11">
+          <div class="uc-head">
+            <span class="uid">UC-11</span>
+            <h3>Export BPMN and open it in an external modeler</h3>
+            <div class="pillrow"><span class="pill pill--viz">Visualization</span><span class="pill pill--p0">P0</span></div>
+          </div>
+          <div class="uc-body">
+            <dl class="uc-grid">
+              <dt>Primary actor</dt><dd>Enterprise architect</dd>
+              <dt>Goal</dt><dd>Hand the process to an existing modelling practice without losing structure or evidence links.</dd>
+              <dt>Trigger</dt><dd>The client standardises on Camunda Modeler or a similar tool.</dd>
+              <dt>Preconditions</dt><dd>The model is schema-valid and passes semantic checks.</dd>
+              <dt>Postconditions</dt><dd>A BPMN 2.0 file that opens cleanly, plus a mapping report for demoted content.</dd>
+            </dl>
+            <h4 class="mini">Main flow</h4>
+            <ol class="flow">
+              <li>The user requests BPMN export for a version.</li>
+              <li>The system validates the model and runs deterministic auto-layout.</li>
+              <li>Evidence links are written as namespaced extension elements.</li>
+              <li>The system generates BPMN 2.0 XML and validates it against the schema and semantic rules.</li>
+              <li>The user downloads the file and opens it in an external modeler.</li>
+              <li>After local edits, the user re-imports; identifiers and evidence links are preserved.</li>
+            </ol>
+            <div class="alt">
+              <h4>Alternate flow — validation failure</h4>
+              <ol>
+                <li>The export is blocked and each error names the offending element.</li>
+                <li>The user is taken to the element in the canvas to fix it.</li>
+              </ol>
+            </div>
+            <div class="uc-foot">
+              <span>Requirements</span>
+              <div class="links"><a class="chip" href="#req-viz">REQ-VIZ-01</a><a class="chip" href="#req-viz">02</a><a class="chip" href="#req-viz">03</a><a class="chip" href="#req-viz">04</a><a class="chip" href="#req-viz">12</a><a class="chip" href="#req-mod">REQ-MOD-06</a></div>
+              <span style="margin-left:auto">Tests</span>
+              <div class="links"><a class="chip chip--tc" href="test-cases.html#tc-040">TC-040</a><a class="chip chip--tc" href="test-cases.html#tc-041">041</a><a class="chip chip--tc" href="test-cases.html#tc-042">042</a><a class="chip chip--tc" href="test-cases.html#tc-043">043</a><a class="chip chip--tc" href="test-cases.html#tc-044">044</a><a class="chip chip--tc" href="test-cases.html#tc-052">052</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- UC-12 -->
+        <div class="uc" id="uc-12">
+          <div class="uc-head">
+            <span class="uid">UC-12</span>
+            <h3>Trace a diagram element to its evidence</h3>
+            <div class="pillrow"><span class="pill pill--viz">Visualization</span><span class="pill pill--p0">P0</span></div>
+          </div>
+          <div class="uc-body">
+            <dl class="uc-grid">
+              <dt>Primary actor</dt><dd>Subject-matter expert or auditor</dd>
+              <dt>Goal</dt><dd>Challenge any element in the diagram and see exactly where it came from, in seconds.</dd>
+              <dt>Trigger</dt><dd>A workshop participant disputes a step or an owner.</dd>
+              <dt>Preconditions</dt><dd>The model has an evidence index.</dd>
+              <dt>Postconditions</dt><dd>The source is open at the exact locator; the element remains selected.</dd>
+            </dl>
+            <h4 class="mini">Main flow</h4>
+            <ol class="flow">
+              <li>The user selects an element on the BPMN canvas.</li>
+              <li>The inspector shows owner, systems, confidence and the citation list.</li>
+              <li>The user selects a citation; the source opens at the page with the region highlighted, at the video timecode, or at the code lines.</li>
+              <li>The user navigates between citations without losing the diagram context.</li>
+            </ol>
+            <div class="alt">
+              <h4>Alternate flow — evidence disputed</h4>
+              <ol>
+                <li>The user marks the citation as disputed, with a comment.</li>
+                <li>The element is flagged and returned to the review queue.</li>
+              </ol>
+            </div>
+            <div class="uc-foot">
+              <span>Requirements</span>
+              <div class="links"><a class="chip" href="#req-viz">REQ-VIZ-05</a><a class="chip" href="#req-viz">06</a><a class="chip" href="#req-viz">07</a><a class="chip" href="#req-viz">10</a><a class="chip" href="#req-viz">11</a></div>
+              <span style="margin-left:auto">Tests</span>
+              <div class="links"><a class="chip chip--tc" href="test-cases.html#tc-045">TC-045</a><a class="chip chip--tc" href="test-cases.html#tc-046">046</a><a class="chip chip--tc" href="test-cases.html#tc-047">047</a><a class="chip chip--tc" href="test-cases.html#tc-048">048</a><a class="chip chip--tc" href="test-cases.html#tc-051">051</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- UC-13 -->
+        <div class="uc" id="uc-13">
+          <div class="uc-head">
+            <span class="uid">UC-13</span>
+            <h3>Compare two process versions</h3>
+            <div class="pillrow"><span class="pill pill--viz">Visualization</span><span class="pill pill--p1">P1</span></div>
+          </div>
+          <div class="uc-body">
+            <dl class="uc-grid">
+              <dt>Primary actor</dt><dd>Process owner</dd>
+              <dt>Goal</dt><dd>See what changed between two versions and why, including owner and KPI changes.</dd>
+              <dt>Trigger</dt><dd>A new source is added or a post-implementation review is due.</dd>
+              <dt>Preconditions</dt><dd>Two versions exist.</dd>
+              <dt>Postconditions</dt><dd>A categorised diff that can be exported and discussed.</dd>
+            </dl>
+            <h4 class="mini">Main flow</h4>
+            <ol class="flow">
+              <li>The user selects two versions.</li>
+              <li>The system computes added, removed and modified elements, including owners, conditions and KPIs.</li>
+              <li>The diff is shown side by side or as an overlay with a legend.</li>
+              <li>The user opens any change to see both versions and their evidence.</li>
+              <li>The user exports the diff for the review pack.</li>
+            </ol>
+            <div class="uc-foot">
+              <span>Requirements</span>
+              <div class="links"><a class="chip" href="#req-doc">REQ-DOC-09</a><a class="chip" href="#req-viz">REQ-VIZ-09</a></div>
+              <span style="margin-left:auto">Tests</span>
+              <div class="links"><a class="chip chip--tc" href="test-cases.html#tc-031">TC-031</a><a class="chip chip--tc" href="test-cases.html#tc-050">050</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- UC-14 -->
+        <div class="uc" id="uc-14">
+          <div class="uc-head">
+            <span class="uid">UC-14</span>
+            <h3>Assess and prioritise business value</h3>
+            <div class="pillrow"><span class="pill pill--ext">Value</span><span class="pill pill--p1">P1</span></div>
+          </div>
+          <div class="uc-body">
+            <dl class="uc-grid">
+              <dt>Primary actor</dt><dd>Portfolio lead or transformation sponsor</dd>
+              <dt>Goal</dt><dd>Decide where to act first, using comparable outcomes rather than volume of process maps.</dd>
+              <dt>Trigger</dt><dd>Several processes have been discovered and capacity is limited.</dd>
+              <dt>Preconditions</dt><dd>At least two processes have a value assessment.</dd>
+              <dt>Postconditions</dt><dd>A ranked shortlist with visible assumptions and confidence.</dd>
+            </dl>
+            <h4 class="mini">Main flow</h4>
+            <ol class="flow">
+              <li>The portfolio lead opens the value dashboard.</li>
+              <li>The system classifies each process by lever and shows KPI, impact and confidence.</li>
+              <li>The priority score is computed from the stored, versioned formula.</li>
+              <li>The lead inspects the matrix and drills into any process.</li>
+              <li>The lead exports the shortlist with assumptions attached.</li>
+            </ol>
+            <div class="alt">
+              <h4>Alternate flow — insufficient inputs</h4>
+              <ol>
+                <li>Where an impact cannot be computed, the process is shown as "not quantified" and excluded from ranking.</li>
+                <li>The reason is visible, so the gap can be closed rather than guessed.</li>
+              </ol>
+            </div>
+            <div class="uc-foot">
+              <span>Requirements</span>
+              <div class="links"><a class="chip" href="#req-val">REQ-VAL-01</a><a class="chip" href="#req-val">02</a><a class="chip" href="#req-val">03</a><a class="chip" href="#req-val">04</a><a class="chip" href="#req-val">05</a><a class="chip" href="#req-val">06</a><a class="chip" href="#req-viz">REQ-VIZ-08</a></div>
+              <span style="margin-left:auto">Tests</span>
+              <div class="links"><a class="chip chip--tc" href="test-cases.html#tc-019">TC-019</a><a class="chip chip--tc" href="test-cases.html#tc-022">022</a><a class="chip chip--tc" href="test-cases.html#tc-023">023</a><a class="chip chip--tc" href="test-cases.html#tc-049">049</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- UC-15 -->
+        <div class="uc" id="uc-15">
+          <div class="uc-head">
+            <span class="uid">UC-15</span>
+            <h3>Search processes and evidence</h3>
+            <div class="pillrow"><span class="pill pill--viz">Visualization</span><span class="pill pill--p2">P2</span></div>
+          </div>
+          <div class="uc-body">
+            <dl class="uc-grid">
+              <dt>Primary actor</dt><dd>Analyst or portfolio lead</dd>
+              <dt>Goal</dt><dd>Find where a term, control or system appears across models and sources, with citations.</dd>
+              <dt>Trigger</dt><dd>A regulator or auditor asks which processes touch a specific system or control.</dd>
+              <dt>Preconditions</dt><dd>At least one indexed process exists.</dd>
+              <dt>Postconditions</dt><dd>A ranked result set with process, element and citation for each hit.</dd>
+            </dl>
+            <h4 class="mini">Main flow</h4>
+            <ol class="flow">
+              <li>The user enters a keyword or a natural-language question.</li>
+              <li>The system searches models and evidence, combining keyword and semantic ranking.</li>
+              <li>Results show the process, the matched element and a snippet with citation.</li>
+              <li>Selecting a result opens the process at the matched element.</li>
+            </ol>
+            <div class="uc-foot">
+              <span>Requirements</span>
+              <div class="links"><a class="chip" href="#req-mod">REQ-MOD-05</a></div>
+              <span style="margin-left:auto">Tests</span>
+              <div class="links"><a class="chip chip--tc" href="test-cases.html#tc-056">TC-056</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- UC-16 -->
+        <div class="uc" id="uc-16">
+          <div class="uc-head">
+            <span class="uid">UC-16</span>
+            <h3>Reproduce an extraction for audit</h3>
+            <div class="pillrow"><span class="pill pill--doc">Governance</span><span class="pill pill--p2">P2</span></div>
+          </div>
+          <div class="uc-body">
+            <dl class="uc-grid">
+              <dt>Primary actor</dt><dd>Auditor or quality lead</dd>
+              <dt>Goal</dt><dd>Prove that a published model follows deterministically from its inputs and configuration.</dd>
+              <dt>Trigger</dt><dd>An auditor challenges how a model was produced.</dd>
+              <dt>Preconditions</dt><dd>The run manifest and source hashes are stored.</dd>
+              <dt>Postconditions</dt><dd>A re-run comparison showing identical or explained differences.</dd>
+            </dl>
+            <h4 class="mini">Main flow</h4>
+            <ol class="flow">
+              <li>The user opens the run manifest for a version.</li>
+              <li>The system displays source hashes, prompt version, parameters and seed.</li>
+              <li>The user re-runs the extraction with the recorded configuration.</li>
+              <li>The system compares the new model with the stored version and reports identity or differences.</li>
+            </ol>
+            <div class="uc-foot">
+              <span>Requirements</span>
+              <div class="links"><a class="chip" href="#req-ext">REQ-EXT-15</a><a class="chip" href="#req-doc">REQ-DOC-02</a></div>
+              <span style="margin-left:auto">Tests</span>
+              <div class="links"><a class="chip chip--tc" href="test-cases.html#tc-017">TC-017</a><a class="chip chip--tc" href="test-cases.html#tc-018">018</a></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ GLOSSARY ============ -->
+      <section class="block" id="glossary">
+        <h2 class="sec"><span class="num">10</span>Glossary</h2>
+        <div class="tablewrap">
+          <table class="tbl compact">
+            <thead><tr><th style="width:22%">Term</th><th>Definition</th></tr></thead>
+            <tbody>
+              <tr><td><b>CPM</b></td><td>Canonical Process Model — the versioned JSON document that is the system of record for a process.</td></tr>
+              <tr><td><b>Locator</b></td><td>A precise, resolvable pointer to evidence: page and bounding box, image region, file and line range, or video timecode range.</td></tr>
+              <tr><td><b>Evidence coverage</b></td><td>Percentage of model elements that carry at least one resolvable locator.</td></tr>
+              <tr><td><b>Unsupported claim</b></td><td>An element or statement in a model or document that cannot be resolved to a source locator.</td></tr>
+              <tr><td><b>Candidate</b></td><td>An extracted element with insufficient evidence. Visible for review, never promoted automatically.</td></tr>
+              <tr><td><b>Golden corpus</b></td><td>A fixed, human-adjudicated set of sources and expected models used to measure extraction quality and guard against regression.</td></tr>
+              <tr><td><b>Fusion</b></td><td>Merging equivalent elements from multiple sources while retaining each citation and surfacing conflicts.</td></tr>
+              <tr><td><b>Value lever</b></td><td>The mechanism by which a process improvement creates value: cost, revenue, risk, compliance, customer experience or cycle time.</td></tr>
+              <tr><td><b>Round-trip</b></td><td>Export to BPMN, edit in an external modeler, re-import — preserving identifiers and evidence.</td></tr>
+              <tr><td><b>Drift</b></td><td>A difference between versions of a process caused by a new source, a code change or a human correction.</td></tr>
+              <tr><td><b>Notation policy</b></td><td>The published mapping from extracted content to BPMN elements, including what is deliberately demoted to annotations.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="divider"><span>Continue</span></div>
+        <div class="grid g3">
+          <a class="card doc-card" href="features.html">
+            <div class="label">Context</div>
+            <h3>Feature blueprint</h3>
+            <p>The 12 features these requirements implement, the business value model and the BPMN notation policy.</p>
+            <div class="go">Back to features →</div>
+          </a>
+          <a class="card doc-card" href="test-cases.html">
+            <div class="label">Verification</div>
+            <h3>Test cases</h3>
+            <p>60 test cases with steps and expected results, traced to the requirements and use cases on this page.</p>
+            <div class="go">Read test cases →</div>
+          </a>
+          <a class="card doc-card" href="index.html">
+            <div class="label">Navigation</div>
+            <h3>Traceability hub</h3>
+            <p>The complete requirement → use case → test case matrix with coverage status.</p>
+            <div class="go">Open hub →</div>
+          </a>
+        </div>
+      </section>
+
+    </div>
+
+    <div class="doc-footer">
+      <div>Process Atlas · Requirements &amp; use cases · v1.0 draft</div>
+      <div>49 requirements · 16 use cases · 10 quality gates</div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

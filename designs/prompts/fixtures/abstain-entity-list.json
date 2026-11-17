@@ -1,0 +1,19 @@
+{
+  "kind": "notBusinessProcess",
+  "classification": {
+    "isBusinessProcess": false,
+    "pattern": "entity_list",
+    "confidence": 0.96,
+    "rationale": "Field inventory with no activity, actor or control flow; the model correctly abstains."
+  },
+  "process": null,
+  "processes": [],
+  "rejected": [
+    { "label": "Invoice Number", "why": "field, not an activity" },
+    { "label": "Customer Name", "why": "field, not an activity" },
+    { "label": "Amount", "why": "field, not an activity" },
+    { "label": "Due Date", "why": "field, not an activity" },
+    { "label": "Status", "why": "field, not an activity" }
+  ],
+  "openQuestions": []
+}

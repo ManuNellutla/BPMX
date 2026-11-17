@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe — Evidence &amp; provenance</title>
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="wf.css">
+</head>
+<body class="wf">
+
+<div class="wf-top">
+  <div class="wf-brand"><span class="wf-mark">PA</span> Process Atlas</div>
+  <div class="wf-top-project">Finance Transformation / <b>Invoice to Cash</b> / Evidence</div>
+  <div class="wf-top-right">
+    <span class="wf-ribbon">Wireframe</span>
+    <a class="wf-btn" href="01-bpmn-canvas.html">← Canvas</a>
+    <span class="wf-status wf-status--ok">v3 approved</span>
+  </div>
+</div>
+
+<div class="wf-scroll">
+
+  <!-- provenance chain -->
+  <div class="wf-panel" style="margin-bottom:12px">
+    <div class="wf-panel-head">Provenance chain <span class="right">element n_issue_invoice · every link is immutable</span></div>
+    <div class="wf-panel-body" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+      <div class="wf-chain" style="font-size:9.5px">
+        <span>sha256:6b1f0c…</span><i>→</i>
+        <span>run_7c1e9a</span><i>→</i>
+        <span>extract@1.4.0 · T0 · seed 42</span><i>→</i>
+        <span>CPM v3</span><i>→</i>
+        <span>2 human edits</span><i>→</i>
+        <span style="background:#e9f5f4;border-color:#c6e7e4;color:#0b6b69">approved 2026-11-17</span>
+      </div>
+      <span style="margin-left:auto;font-family:var(--font-mono);font-size:9px;color:#7e93a5">reproducible from inputs</span>
+    </div>
+  </div>
+
+  <div class="wf-grid3" style="grid-template-columns:240px minmax(0,1fr) 390px">
+
+    <!-- ================= LEFT: captured ================= -->
+    <div class="wf-stack">
+      <div class="wf-panel">
+        <div class="wf-panel-head">Element</div>
+        <div class="wf-panel-body">
+          <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:.8px;color:#7e93a5">SERVICE TASK</div>
+          <div style="font-size:14px;font-weight:680;color:var(--blue-900);margin:2px 0">Issue invoice</div>
+          <div style="font-family:var(--font-mono);font-size:9.5px;color:#7e93a5">n_issue_invoice</div>
+          <div class="wf-meter" style="margin-top:10px"><i style="width:94%"></i></div>
+          <div class="wf-meter-row"><span>confidence 0.94</span><span>2 locators</span></div>
+        </div>
+      </div>
+
+      <div class="wf-panel">
+        <div class="wf-panel-head">Captured fields</div>
+        <div class="wf-panel-body">
+          <dl class="wf-kv">
+            <dt>Type</dt><dd>serviceTask</dd>
+            <dt>Lane</dt><dd>Finance</dd>
+            <dt>Systems</dt><dd>ERP</dd>
+            <dt>Inputs</dt><dd>Sales order</dd>
+            <dt>Outputs</dt><dd>Invoice PDF</dd>
+            <dt>Preceding</dt><dd>Confirm order</dd>
+            <dt>Following</dt><dd>Apply payment</dd>
+            <dt>Automation</dt><dd>0.80</dd>
+            <dt>Value</dt><dd>−0.4 d cycle time</dd>
+            <dt>Evidence</dt><dd>1 page · 1 code</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="wf-panel">
+        <div class="wf-panel-head">Locator kinds</div>
+        <div class="wf-panel-body" style="display:flex;flex-direction:column;gap:5px;font-family:var(--font-mono);font-size:9.5px;color:#5d7488">
+          <span>page · page+bbox</span>
+          <span>code · file+line range</span>
+          <span>video · timecode range</span>
+          <span>image · region bbox</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= MIDDLE: evidence list ================= -->
+    <div class="wf-stack">
+      <div class="wf-panel">
+        <div class="wf-panel-head">Evidence · 3 accepted <span class="right">sorted by confidence</span></div>
+        <div class="wf-panel-body" style="display:flex;flex-direction:column;gap:8px">
+
+          <div class="wf-ev" style="border-color:var(--blue-300);background:#f7fbfe;box-shadow:inset 3px 0 0 var(--blue-600)">
+            <div class="wf-ev-top">
+              <span class="wf-ev-kind">PDF</span>
+              <span class="wf-ev-loc">p.4 · [412,268,548,302]</span>
+              <span class="wf-ev-conf">0.95</span>
+            </div>
+            <q>Finance issues the invoice within 24 hours of order confirmation.</q>
+            <div style="font-family:var(--font-mono);font-size:8.5px;color:#7e93a5;margin-top:5px">source src_pdf_9f2a · finance-process-pack.pdf · sha256:6b1f0c…</div>
+          </div>
+
+          <div class="wf-ev">
+            <div class="wf-ev-top">
+              <span class="wf-ev-kind wf-ev-kind--code">CODE</span>
+              <span class="wf-ev-loc">src/billing/invoice.ts:112–140</span>
+              <span class="wf-ev-conf">0.92</span>
+            </div>
+            <q>await erp.invoices.create({ orderId, dueDate, amount })</q>
+            <div style="font-family:var(--font-mono);font-size:8.5px;color:#7e93a5;margin-top:5px">source src_code_41c8 · commit 8f21ac · tree-sitter: call_expression</div>
+          </div>
+
+          <div class="wf-ev">
+            <div class="wf-ev-top">
+              <span class="wf-ev-kind wf-ev-kind--time">VIDEO</span>
+              <span class="wf-ev-loc">04:12–04:31 · SME Finance</span>
+              <span class="wf-ev-conf">0.81</span>
+            </div>
+            <q>…then billing raises the invoice in SAP the same day, usually before 4pm.</q>
+            <div style="font-family:var(--font-mono);font-size:8.5px;color:#7e93a5;margin-top:5px">source src_video_77b1 · workshop-01.mp4 · diarization: speaker_2</div>
+          </div>
+
+          <div class="wf-ev" style="border-style:dashed;border-color:#f2d4d9;background:#fdf7f8">
+            <div class="wf-ev-top">
+              <span class="wf-ev-kind" style="background:#fceef0;color:#8e3540">CANDIDATE</span>
+              <span class="wf-ev-loc">no locator</span>
+              <span class="wf-ev-conf" style="color:#8e3540">0.41</span>
+            </div>
+            <div style="font-size:11.2px;color:#2e4559">Apply early-payment discount</div>
+            <div style="font-family:var(--font-mono);font-size:8.5px;color:#8e3540;margin-top:5px">E_NO_LOCATOR · excluded from approved model · needs confirmation</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="wf-panel">
+        <div class="wf-panel-head">Review history</div>
+        <div class="wf-panel-body" style="display:flex;flex-direction:column;gap:9px;font-size:11.2px">
+          <div style="display:flex;gap:8px"><span class="wf-chain"><span>AN</span></span><div><b>analyst_04</b> renamed “Create invoice” → “Issue invoice”<div style="font-family:var(--font-mono);font-size:8.5px;color:#7e93a5">2026-11-16 15:04 · reason: verb–object normalisation</div></div></div>
+          <div style="display:flex;gap:8px"><span class="wf-chain"><span>AN</span></span><div><b>analyst_04</b> accepted code citation, confidence 0.92<div style="font-family:var(--font-mono);font-size:8.5px;color:#7e93a5">2026-11-16 15:06 · “matches handler”</div></div></div>
+          <div style="display:flex;gap:8px"><span class="wf-chain"><span style="background:#e9f5f4;border-color:#c6e7e4;color:#0b6b69">PO</span></span><div><b>process_owner_finance</b> approved v3<div style="font-family:var(--font-mono);font-size:8.5px;color:#7e93a5">2026-11-17 11:42</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= RIGHT: viewer ================= -->
+    <div class="wf-stack">
+      <div class="wf-panel">
+        <div class="wf-tabs">
+          <span class="wf-tab on">PDF · p.4</span>
+          <span class="wf-tab">Video</span>
+          <span class="wf-tab">Code</span>
+        </div>
+        <div style="padding:10px 12px 12px">
+          <div class="wf-page" style="margin:0">
+            <div style="display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:8px;color:#7e93a5;border-bottom:1px solid #e7f0f8;padding-bottom:5px;margin-bottom:9px">
+              <span>FINANCE PROCESS PACK · v2.1</span><span>4 / 12</span>
+            </div>
+            <h5>4.2 Invoice issuance</h5>
+            <p style="margin:0 0 7px">Once the order is confirmed, billing issues the invoice from the ERP system. The document is sent to the customer's billing contact.</p>
+            <p style="margin:0 0 9px"><span class="wf-bbox">Finance issues the invoice within 24 hours of order confirmation.</span></p>
+            <div class="wf-lines"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            <p style="margin:9px 0 0;font-size:9.5px;color:#7e93a5">Unmatched payments are routed to dunning after 7 days.</p>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-family:var(--font-mono);font-size:8.5px;color:#7e93a5">
+            <span>bbox [412,268,548,302]</span>
+            <span>page 4 · scale 1.0 · 0.95</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="wf-panel">
+        <div class="wf-panel-head">Video locator <span class="right">t=252–271s</span></div>
+        <div class="wf-panel-body">
+          <div class="wf-video" style="height:132px">
+            <div class="play">▶</div>
+            <div class="cap">“billing raises the invoice in SAP the same day”</div>
+            <div class="tc">04:12 / 08:04</div>
+          </div>
+          <div class="wf-track"><i></i><b></b></div>
+          <div style="display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:8.5px;color:#7e93a5;margin-top:6px">
+            <span>speaker_2 · SME Finance</span><span>confidence 0.81</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="wf-panel">
+        <div class="wf-panel-head">Code locator <span class="right">invoice.ts:112–140</span></div>
+        <div class="wf-panel-body">
+          <div class="wf-codeview"><span class="ln">108</span><span class="k">export async function</span> issueInvoice(order) {<br>
+            <span class="ln">109</span>&nbsp;&nbsp;<span class="k">const</span> dueDate = addDays(order.confirmedAt, 30);<br>
+            <span class="ln">110</span>&nbsp;&nbsp;<span class="k">const</span> amount = order.total;<br>
+            <span class="hl"><span class="ln">112</span>&nbsp;&nbsp;<span class="k">await</span> erp.invoices.create({<br></span>
+            <span class="hl"><span class="ln">113</span>&nbsp;&nbsp;&nbsp;&nbsp;orderId: order.id, dueDate, amount<br></span>
+            <span class="hl"><span class="ln">114</span>&nbsp;&nbsp;});<br></span>
+            <span class="ln">115</span>&nbsp;&nbsp;<span class="k">return</span> <span class="s">'issued'</span>;<br>
+            <span class="ln">116</span>}</div>
+        </div>
+      </div>
+
+      <div class="wf-panel">
+        <div class="wf-panel-head">Regenerate</div>
+        <div class="wf-panel-body" style="display:flex;gap:6px">
+          <button class="wf-btn wf-btn--sm">Re-run this source</button>
+          <button class="wf-btn wf-btn--sm">Compare with v2</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

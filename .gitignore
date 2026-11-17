@@ -1,0 +1,13 @@
+# Generated extraction output
+agent/atlas-out/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# OS and editor state
+.DS_Store
+.idea/
+.vscode/

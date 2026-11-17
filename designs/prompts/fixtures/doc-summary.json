@@ -1,0 +1,32 @@
+{
+  "kind": "businessProcess",
+  "classification": {
+    "isBusinessProcess": true,
+    "pattern": "process",
+    "confidence": 0.65,
+    "rationale": "Headings were misread as activities."
+  },
+  "process": {
+    "schemaVersion": "1.0.0",
+    "id": "prc_fixture_doc",
+    "name": "Process Pack Section 4",
+    "domain": "Finance",
+    "version": 1,
+    "status": "draft",
+    "scope": { "trigger": "", "outcome": "" },
+    "lanes": [{ "id": "lane_doc", "name": "Author", "type": "internal" }],
+    "nodes": [
+      { "id": "n_1", "type": "task", "name": "Introduction", "laneId": "lane_doc", "confidence": 0.5 },
+      { "id": "n_2", "type": "task", "name": "Background", "laneId": "lane_doc", "confidence": 0.5 },
+      { "id": "n_3", "type": "task", "name": "Method", "laneId": "lane_doc", "confidence": 0.5 },
+      { "id": "n_4", "type": "task", "name": "Results", "laneId": "lane_doc", "confidence": 0.5 },
+      { "id": "n_5", "type": "task", "name": "Conclusion", "laneId": "lane_doc", "confidence": 0.5 }
+    ],
+    "edges": [],
+    "value": {},
+    "candidates": [],
+    "openQuestions": []
+  },
+  "processes": [],
+  "rejected": []
+}

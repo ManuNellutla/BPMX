@@ -1,0 +1,103 @@
+{
+  "kind": "multipleProcesses",
+  "classification": {
+    "isBusinessProcess": true,
+    "pattern": "multi_process",
+    "confidence": 0.7,
+    "rationale": "Two unrelated flows with different triggers were placed in one graph."
+  },
+  "process": null,
+  "processes": [
+    {
+      "schemaVersion": "1.0.0",
+      "id": "prc_fixture_multi",
+      "name": "Operations",
+      "domain": "Operations",
+      "version": 1,
+      "status": "draft",
+      "scope": {
+        "trigger": "Request received",
+        "outcome": "Request closed"
+      },
+      "lanes": [
+        { "id": "lane_ops", "name": "Operations", "type": "internal" },
+        { "id": "lane_fin", "name": "Finance", "type": "internal" }
+      ],
+      "nodes": [
+        {
+          "id": "n_a_start", "type": "startEvent", "name": "Request received",
+          "laneId": "lane_ops", "confidence": 0.9,
+          "evidence": [{ "sourceId": "s1", "kind": "page",
+            "locator": { "page": 1, "bbox": [10, 10, 90, 30] },
+            "quote": "A request starts when the form is received.", "confidence": 0.9 }]
+        },
+        {
+          "id": "n_a_recv", "type": "userTask", "name": "Receive request",
+          "laneId": "lane_ops", "confidence": 0.9,
+          "evidence": [{ "sourceId": "s1", "kind": "page",
+            "locator": { "page": 1, "bbox": [100, 10, 200, 40] },
+            "quote": "Operations receives the request and logs it.", "confidence": 0.9 }]
+        },
+        {
+          "id": "n_a_appr", "type": "userTask", "name": "Approve request",
+          "laneId": "lane_ops", "confidence": 0.9,
+          "evidence": [{ "sourceId": "s1", "kind": "page",
+            "locator": { "page": 1, "bbox": [210, 10, 320, 40] },
+            "quote": "The team lead approves the request.", "confidence": 0.9 }]
+        },
+        {
+          "id": "n_a_end", "type": "endEvent", "name": "Request closed",
+          "laneId": "lane_ops", "confidence": 0.9,
+          "evidence": [{ "sourceId": "s1", "kind": "page",
+            "locator": { "page": 1, "bbox": [330, 10, 430, 30] },
+            "quote": "The request is closed once approved.", "confidence": 0.9 }]
+        },
+        {
+          "id": "n_b_start", "type": "startEvent", "name": "Invoice due",
+          "laneId": "lane_fin", "confidence": 0.9,
+          "evidence": [{ "sourceId": "s2", "kind": "page",
+            "locator": { "page": 6, "bbox": [10, 300, 90, 320] },
+            "quote": "Invoicing starts when the invoice becomes due.", "confidence": 0.9 }]
+        },
+        {
+          "id": "n_b_raise", "type": "userTask", "name": "Raise invoice",
+          "laneId": "lane_fin", "confidence": 0.9,
+          "evidence": [{ "sourceId": "s2", "kind": "page",
+            "locator": { "page": 6, "bbox": [100, 300, 210, 330] },
+            "quote": "Finance raises the invoice in the ERP.", "confidence": 0.9 }]
+        },
+        {
+          "id": "n_b_collect", "type": "userTask", "name": "Collect payment",
+          "laneId": "lane_fin", "confidence": 0.9,
+          "evidence": [{ "sourceId": "s2", "kind": "page",
+            "locator": { "page": 6, "bbox": [220, 300, 330, 330] },
+            "quote": "Finance collects payment against the invoice.", "confidence": 0.9 }]
+        },
+        {
+          "id": "n_b_end", "type": "endEvent", "name": "Payment received",
+          "laneId": "lane_fin", "confidence": 0.9,
+          "evidence": [{ "sourceId": "s2", "kind": "page",
+            "locator": { "page": 6, "bbox": [340, 300, 440, 320] },
+            "quote": "The flow ends when payment is received.", "confidence": 0.9 }]
+        }
+      ],
+      "edges": [
+        { "id": "e_a1", "from": "n_a_start", "to": "n_a_recv" },
+        { "id": "e_a2", "from": "n_a_recv", "to": "n_a_appr" },
+        { "id": "e_a3", "from": "n_a_appr", "to": "n_a_end" },
+        { "id": "e_b1", "from": "n_b_start", "to": "n_b_raise" },
+        { "id": "e_b2", "from": "n_b_raise", "to": "n_b_collect" },
+        { "id": "e_b3", "from": "n_b_collect", "to": "n_b_end" }
+      ],
+      "value": {
+        "lever": ["cycleTime"],
+        "outcome": { "statement": "Close requests faster", "kpi": "Cycle time",
+          "baseline": null, "target": null, "unit": "days", "horizon": "", "basis": "assumption" },
+        "noQuantifiedOutcome": null
+      },
+      "candidates": [],
+      "openQuestions": []
+    }
+  ],
+  "rejected": []
+}

@@ -1,0 +1,81 @@
+{
+  "kind": "businessProcess",
+  "classification": {
+    "isBusinessProcess": true,
+    "pattern": "process",
+    "confidence": 0.86,
+    "rationale": "A real sequence whose activities are named as nouns rather than verb-object."
+  },
+  "process": {
+    "schemaVersion": "1.0.0",
+    "id": "prc_fixture_noun_labels",
+    "name": "Invoice Issuance",
+    "domain": "Finance",
+    "version": 1,
+    "status": "draft",
+    "scope": {
+      "trigger": "Invoice due",
+      "outcome": "Invoice settled"
+    },
+    "lanes": [
+      { "id": "lane_billing", "name": "Billing", "type": "internal" },
+      { "id": "lane_collections", "name": "Collections", "type": "internal" }
+    ],
+    "nodes": [
+      {
+        "id": "n_start", "type": "startEvent", "name": "Invoice due",
+        "laneId": "lane_billing", "confidence": 0.9,
+        "evidence": [{ "sourceId": "s1", "kind": "page",
+          "locator": { "page": 2, "bbox": [10, 10, 90, 30] },
+          "quote": "Issuance starts when the invoice becomes due.", "confidence": 0.9 }]
+      },
+      {
+        "id": "n_issue", "type": "userTask", "name": "Invoice issuance",
+        "laneId": "lane_billing", "confidence": 0.9,
+        "evidence": [{ "sourceId": "s1", "kind": "page",
+          "locator": { "page": 2, "bbox": [100, 10, 220, 40] },
+          "quote": "Billing issues the invoice from the ERP system.", "confidence": 0.9 }]
+      },
+      {
+        "id": "n_apply", "type": "userTask", "name": "Payment application",
+        "laneId": "lane_collections", "confidence": 0.88,
+        "evidence": [{ "sourceId": "s1", "kind": "page",
+          "locator": { "page": 2, "bbox": [230, 10, 360, 40] },
+          "quote": "Collections applies the incoming payment to the invoice.", "confidence": 0.88 }]
+      },
+      {
+        "id": "n_dunning", "type": "userTask", "name": "Dunning",
+        "laneId": "lane_collections", "confidence": 0.82,
+        "evidence": [{ "sourceId": "s1", "kind": "page",
+          "locator": { "page": 2, "bbox": [370, 10, 470, 40] },
+          "quote": "Unpaid invoices enter the dunning run after seven days.", "confidence": 0.82 }]
+      },
+      {
+        "id": "n_end", "type": "endEvent", "name": "Invoice settled",
+        "laneId": "lane_collections", "confidence": 0.9,
+        "evidence": [{ "sourceId": "s1", "kind": "page",
+          "locator": { "page": 2, "bbox": [480, 10, 590, 30] },
+          "quote": "The process ends when the invoice is settled.", "confidence": 0.9 }]
+      }
+    ],
+    "edges": [
+      { "id": "e_1", "from": "n_start", "to": "n_issue" },
+      { "id": "e_2", "from": "n_issue", "to": "n_apply" },
+      { "id": "e_3", "from": "n_apply", "to": "n_dunning" },
+      { "id": "e_4", "from": "n_dunning", "to": "n_end" }
+    ],
+    "value": {
+      "lever": ["cycleTime"],
+      "outcome": {
+        "statement": "Settle invoices within 30 days",
+        "kpi": "Days sales outstanding", "baseline": 41, "target": 30,
+        "unit": "days", "horizon": "2 quarters", "basis": "cited"
+      },
+      "noQuantifiedOutcome": null
+    },
+    "candidates": [],
+    "openQuestions": []
+  },
+  "processes": [],
+  "rejected": []
+}

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe — BPMN canvas with evidence overlay</title>
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="wf.css">
+</head>
+<body class="wf">
+
+<div class="wf-top">
+  <div class="wf-brand"><span class="wf-mark">PA</span> Process Atlas</div>
+  <div class="wf-top-project">Finance Transformation / <b>Invoice to Cash</b></div>
+  <div class="wf-top-right">
+    <span class="wf-ribbon">Wireframe</span>
+    <span class="wf-status wf-status--draft">Draft v3</span>
+    <button class="wf-btn">Export BPMN</button>
+    <button class="wf-btn wf-btn--primary">Submit for review</button>
+  </div>
+</div>
+
+<div class="wf-body">
+
+  <!-- ============ RAIL ============ -->
+  <aside class="wf-rail">
+    <div class="wf-rail-title">Workspace</div>
+    <a class="wf-tree" href="#"><span class="dot" style="background:#3485c4"></span> Processes <small>12</small></a>
+    <a class="wf-tree" href="#"><span class="dot" style="background:#7e93a5"></span> Sources <small>7</small></a>
+    <a class="wf-tree" href="#"><span class="dot" style="background:#a96a12"></span> Findings <small>1</small></a>
+    <a class="wf-tree" href="#"><span class="dot" style="background:#0e7c7b"></span> Value <small>4</small></a>
+    <a class="wf-tree" href="#"><span class="dot" style="background:#8e3540"></span> Reviews <small>6</small></a>
+
+    <div class="wf-rail-title">Processes</div>
+    <a class="wf-tree is-active" href="#"><span class="dot" style="background:#0e7c7b"></span> Invoice to Cash <small>v3</small></a>
+    <a class="wf-tree" href="#"><span class="dot" style="background:#a96a12"></span> Order to Delivery <small>v1</small></a>
+    <a class="wf-tree" href="#"><span class="dot" style="background:#a96a12"></span> Vendor Onboarding <small>v2</small></a>
+    <a class="wf-tree" href="#"><span class="dot" style="background:#7e93a5"></span> Expense Reimbursement <small>v1</small></a>
+    <a class="wf-tree" href="#"><span class="dot" style="background:#0e7c7b"></span> Credit Control <small>v4</small></a>
+
+    <div class="wf-rail-title">Sources</div>
+    <a class="wf-tree" href="#"><span class="dot" style="background:#8e3540"></span> finance-process-pack.pdf</a>
+    <a class="wf-tree" href="#"><span class="dot" style="background:#3485c4"></span> repo billing-service</a>
+    <a class="wf-tree" href="#"><span class="dot" style="background:#a96a12"></span> workshop-01.mp4</a>
+  </aside>
+
+  <!-- ============ CENTER ============ -->
+  <main class="wf-center">
+
+    <div class="wf-toolbar">
+      <div class="title">Invoice to Cash <span style="font-family:var(--font-mono);font-size:10px;color:#7e93a5;font-weight:400">· prc_01J8Q4Z9K2M7 · v3</span></div>
+      <span class="wf-status wf-status--ok">9 evidence</span>
+      <span class="wf-status" style="background:#fceef0;color:#8e3540;border-color:#f2d4d9">1 finding</span>
+      <span class="wf-status">auto 0.62</span>
+      <div class="wf-seg"><span>Fit</span><span>−</span><span>+</span></div>
+      <div class="wf-seg"><span>Evidence</span><span class="on">On</span></div>
+      <div class="wf-seg"><span>Heat</span><span>Off</span></div>
+    </div>
+
+    <div class="wf-canvas">
+      <div class="wf-sheet">
+        <svg viewBox="0 0 980 500" role="img" aria-label="BPMN diagram of Invoice to Cash with three lanes, evidence badges and confidence bars" font-family="ui-sans-serif, Segoe UI, Inter, sans-serif">
+          <defs>
+            <marker id="seq" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M0 0 L10 5 L0 10 z" fill="#7fa6c4"/>
+            </marker>
+            <marker id="seqSel" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M0 0 L10 5 L0 10 z" fill="#1f6aab"/>
+            </marker>
+          </defs>
+
+          <!-- pool + lanes -->
+          <rect x="16" y="16" width="948" height="468" rx="4" fill="#ffffff" stroke="#b9cfe2"/>
+          <rect x="16" y="16" width="28" height="468" fill="#eef5fb" stroke="#b9cfe2"/>
+          <text x="32" y="250" font-size="10" fill="#41627d" text-anchor="middle" transform="rotate(-90 32 250)" font-weight="600">Invoice to Cash</text>
+
+          <line x1="44" y1="16" x2="44" y2="484" stroke="#cfe0ee"/>
+          <line x1="150" y1="16" x2="150" y2="484" stroke="#cfe0ee"/>
+          <line x1="44" y1="172" x2="964" y2="172" stroke="#cfe0ee"/>
+          <line x1="44" y1="328" x2="964" y2="328" stroke="#cfe0ee"/>
+
+          <rect x="44" y="16" width="106" height="156" fill="#f7fbfe"/>
+          <rect x="44" y="172" width="106" height="156" fill="#f2f8fd"/>
+          <rect x="44" y="328" width="106" height="156" fill="#f7fbfe"/>
+          <text x="96" y="98" font-size="10.5" fill="#17517e" text-anchor="middle" font-weight="650">Customer</text>
+          <text x="96" y="254" font-size="10.5" fill="#17517e" text-anchor="middle" font-weight="650">Sales Operations</text>
+          <text x="96" y="410" font-size="10.5" fill="#17517e" text-anchor="middle" font-weight="650">Finance</text>
+
+          <!-- edges -->
+          <g stroke="#7fa6c4" stroke-width="1.3" fill="none" marker-end="url(#seq)">
+            <line x1="200" y1="94" x2="210" y2="94"/>
+            <polyline points="330,94 345,94 345,250 358,250"/>
+            <line x1="500" y1="250" x2="520" y2="250"/>
+            <line x1="568" y1="250" x2="586" y2="250"/>
+            <polyline points="545,273 545,300 425,300 425,376"/>
+            <polyline points="647,278 647,352 659,352 659,376"/>
+            <line x1="718" y1="406" x2="746" y2="406"/>
+            <line x1="898" y1="406" x2="913" y2="406"/>
+            <line x1="490" y1="406" x2="513" y2="406"/>
+          </g>
+
+          <!-- condition labels -->
+          <text x="574" y="243" font-size="8.5" fill="#5d7488">approved</text>
+          <text x="452" y="294" font-size="8.5" fill="#8e3540">rejected</text>
+
+          <!-- start -->
+          <circle cx="185" cy="94" r="15" fill="#e9f5f4" stroke="#0e7c7b" stroke-width="1.6"/>
+          <text x="185" y="72" font-size="9" fill="#5d7488" text-anchor="middle">Invoice required</text>
+          <circle cx="193" cy="84" r="9" fill="#0e7c7b"/>
+          <text x="193" y="87" font-size="8.5" fill="#fff" text-anchor="middle" font-weight="700">1</text>
+
+          <!-- n2 user task -->
+          <g>
+            <rect x="212" y="66" width="118" height="56" rx="6" fill="#f0f7fc" stroke="#9ac4e4" stroke-width="1.4"/>
+            <g stroke="#1f6aab" fill="none" stroke-width="1.2"><circle cx="222" cy="78" r="2.4"/><path d="M218 86 q4 -5 8 0"/></g>
+            <text x="271" y="96" font-size="10.2" fill="#0b2b45" text-anchor="middle" font-weight="600">Raise purchase order</text>
+            <rect x="218" y="113" width="106" height="3" rx="1.5" fill="#0e7c7b" opacity=".8"/>
+            <circle cx="321" cy="76" r="8.5" fill="#0e7c7b"/>
+            <text x="321" y="79" font-size="8" fill="#fff" text-anchor="middle" font-weight="700">1</text>
+          </g>
+
+          <!-- n3 service task, finding outline -->
+          <rect x="354" y="216" width="152" height="68" rx="8" fill="none" stroke="#8e3540" stroke-width="1" stroke-dasharray="3 3"/>
+          <g>
+            <rect x="360" y="222" width="140" height="56" rx="6" fill="#f0f7fc" stroke="#9ac4e4" stroke-width="1.4"/>
+            <g stroke="#1f6aab" fill="none" stroke-width="1.1">
+              <circle cx="370" cy="234" r="2.6"/>
+              <path d="M370 230.4 v-2 M370 237.6 v2 M366.4 234 h-2 M373.6 234 h2"/>
+            </g>
+            <text x="430" y="252" font-size="10.2" fill="#0b2b45" text-anchor="middle" font-weight="600">Validate order &amp; credit</text>
+            <rect x="366" y="269" width="106" height="3" rx="1.5" fill="#a96a12" opacity=".85"/>
+            <circle cx="489" cy="232" r="8.5" fill="#0e7c7b"/>
+            <text x="489" y="235" font-size="8" fill="#fff" text-anchor="middle" font-weight="700">2</text>
+          </g>
+          <text x="430" y="208" font-size="8.5" fill="#8e3540" text-anchor="middle" font-weight="600">⚑ actor mismatch</text>
+
+          <!-- gateway -->
+          <g>
+            <path d="M545 227 L568 250 L545 273 L522 250 Z" fill="#fdf4e4" stroke="#a96a12" stroke-width="1.5"/>
+            <text x="545" y="254" font-size="11" fill="#8a5510" text-anchor="middle" font-weight="700">×</text>
+            <text x="545" y="216" font-size="9.5" fill="#5d7488" text-anchor="middle">Credit approved?</text>
+          </g>
+
+          <!-- n5 user task -->
+          <g>
+            <rect x="588" y="222" width="118" height="56" rx="6" fill="#f0f7fc" stroke="#9ac4e4" stroke-width="1.4"/>
+            <g stroke="#1f6aab" fill="none" stroke-width="1.2"><circle cx="598" cy="234" r="2.4"/><path d="M594 242 q4 -5 8 0"/></g>
+            <text x="647" y="252" font-size="10.2" fill="#0b2b45" text-anchor="middle" font-weight="600">Confirm order</text>
+            <rect x="594" y="269" width="106" height="3" rx="1.5" fill="#a96a12" opacity=".85"/>
+            <circle cx="697" cy="232" r="8.5" fill="#0e7c7b"/>
+            <text x="697" y="235" font-size="8" fill="#fff" text-anchor="middle" font-weight="700">1</text>
+          </g>
+
+          <!-- n6 selected service task -->
+          <rect x="594" y="372" width="130" height="68" rx="9" fill="none" stroke="#1f6aab" stroke-width="1" opacity=".45"/>
+          <g>
+            <rect x="600" y="378" width="118" height="56" rx="6" fill="#ffffff" stroke="#1f6aab" stroke-width="2.2"/>
+            <g stroke="#1f6aab" fill="none" stroke-width="1.1">
+              <circle cx="610" cy="390" r="2.6"/>
+              <path d="M610 386.4 v-2 M610 393.6 v2 M606.4 390 h-2 M613.6 390 h2"/>
+            </g>
+            <text x="659" y="408" font-size="10.2" fill="#0b2b45" text-anchor="middle" font-weight="650">Issue invoice</text>
+            <rect x="606" y="425" width="106" height="3" rx="1.5" fill="#0e7c7b" opacity=".9"/>
+            <circle cx="709" cy="388" r="8.5" fill="#0e7c7b"/>
+            <text x="709" y="391" font-size="8" fill="#fff" text-anchor="middle" font-weight="700">2</text>
+          </g>
+          <text x="659" y="458" font-size="8.5" fill="#17517e" text-anchor="middle" font-weight="600">selected · 2 citations</text>
+
+          <!-- n7 user task, heat -->
+          <g>
+            <rect x="748" y="378" width="150" height="56" rx="6" fill="#fdf4e4" stroke="#dfb87a" stroke-width="1.4"/>
+            <g stroke="#a96a12" fill="none" stroke-width="1.2"><circle cx="758" cy="390" r="2.4"/><path d="M754 398 q4 -5 8 0"/></g>
+            <text x="823" y="408" font-size="10.2" fill="#0b2b45" text-anchor="middle" font-weight="600">Apply payment &amp; dunning</text>
+            <rect x="754" y="425" width="96" height="3" rx="1.5" fill="#a96a12" opacity=".85"/>
+            <circle cx="887" cy="388" r="8.5" fill="#0e7c7b"/>
+            <text x="887" y="391" font-size="8" fill="#fff" text-anchor="middle" font-weight="700">1</text>
+          </g>
+          <text x="823" y="446" font-size="8" fill="#a96a12" text-anchor="middle">high manual effort</text>
+
+          <!-- n9 -->
+          <g>
+            <rect x="360" y="378" width="130" height="56" rx="6" fill="#f0f7fc" stroke="#9ac4e4" stroke-width="1.4"/>
+            <g stroke="#1f6aab" fill="none" stroke-width="1.2"><circle cx="370" cy="390" r="2.4"/><path d="M366 398 q4 -5 8 0"/></g>
+            <text x="425" y="408" font-size="10.2" fill="#0b2b45" text-anchor="middle" font-weight="600">Place credit hold</text>
+            <rect x="366" y="425" width="102" height="3" rx="1.5" fill="#a96a12" opacity=".85"/>
+            <circle cx="479" cy="388" r="8.5" fill="#0e7c7b"/>
+            <text x="479" y="391" font-size="8" fill="#fff" text-anchor="middle" font-weight="700">1</text>
+          </g>
+
+          <!-- ends -->
+          <circle cx="930" cy="406" r="15" fill="#0e7c7b" stroke="#0b6b69" stroke-width="2"/>
+          <text x="930" y="382" font-size="9" fill="#5d7488" text-anchor="middle">Cash collected</text>
+
+          <circle cx="530" cy="406" r="15" fill="#ffffff" stroke="#8e3540" stroke-width="3"/>
+          <text x="530" y="382" font-size="9" fill="#5d7488" text-anchor="middle">Order rejected</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="wf-foot">
+      <span><span class="k">evidence</span> teal count badge per node</span>
+      <span><span class="k">confidence</span> ● ≥0.85 · ● 0.70–0.85 · ● &lt;0.70</span>
+      <span><span class="k">finding</span> dashed rose outline</span>
+      <span><span class="k">heat</span> amber = high manual effort</span>
+      <span style="margin-left:auto"><span class="k">locator</span> page+bbox / file:line / timecode</span>
+    </div>
+  </main>
+
+  <!-- ============ INSPECTOR ============ -->
+  <aside class="wf-inspector">
+    <div class="wf-ins-head">
+      <div class="type">Service task · exclusive selection</div>
+      <h3>Issue invoice</h3>
+      <div class="eid">n_issue_invoice · lane_finance</div>
+    </div>
+
+    <div class="wf-sec">
+      <h4>Confidence</h4>
+      <div class="wf-meter"><i style="width:94%"></i></div>
+      <div class="wf-meter-row"><span>0.94 · high</span><span>2 citations</span></div>
+    </div>
+
+    <div class="wf-sec">
+      <h4>Captured fields</h4>
+      <dl class="wf-kv">
+        <dt>Lane</dt><dd>Finance</dd>
+        <dt>Systems</dt><dd>ERP</dd>
+        <dt>Inputs</dt><dd>Sales order</dd>
+        <dt>Outputs</dt><dd>Invoice PDF</dd>
+        <dt>Trigger</dt><dd>Order confirmed</dd>
+        <dt>Automation</dt><dd>0.80</dd>
+        <dt>Value</dt><dd>cycle time −0.4 d</dd>
+      </dl>
+    </div>
+
+    <div class="wf-sec">
+      <h4>Evidence · 2</h4>
+
+      <div class="wf-ev">
+        <div class="wf-ev-top">
+          <span class="wf-ev-kind">PDF</span>
+          <span class="wf-ev-loc">p.4 · bbox 412,268</span>
+          <span class="wf-ev-conf">0.95</span>
+        </div>
+        <q>Finance issues the invoice within 24 hours of order confirmation.</q>
+        <div style="margin-top:6px"><a class="open" href="02-evidence-provenance.html">Open source →</a></div>
+      </div>
+
+      <div class="wf-ev">
+        <div class="wf-ev-top">
+          <span class="wf-ev-kind wf-ev-kind--code">CODE</span>
+          <span class="wf-ev-loc">invoice.ts:112–140</span>
+          <span class="wf-ev-conf">0.92</span>
+        </div>
+        <q>await erp.invoices.create({ orderId, dueDate, amount })</q>
+        <div style="margin-top:6px"><a class="open" href="02-evidence-provenance.html">Open source →</a></div>
+      </div>
+
+      <div class="wf-actions">
+        <button class="wf-btn wf-btn--primary wf-btn--sm">Accept</button>
+        <button class="wf-btn wf-btn--sm">Edit</button>
+        <button class="wf-btn wf-btn--sm">Dispute</button>
+      </div>
+      <div class="wf-note">Edit requires a reason. The original extracted value and author are retained.</div>
+    </div>
+
+    <div class="wf-sec">
+      <h4>Model reference</h4>
+      <div class="wf-chain">
+        <span>CPM 1.0</span><i>→</i><span>v3</span><i>→</i><span>n_issue_invoice</span>
+      </div>
+      <div class="wf-note">run_7c1e9a · prompt extract@1.4.0 · seed 42</div>
+    </div>
+  </aside>
+</div>
+
+</body>
+</html>

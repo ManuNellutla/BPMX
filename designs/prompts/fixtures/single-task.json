@@ -1,0 +1,68 @@
+{
+  "kind": "businessProcess",
+  "classification": {
+    "isBusinessProcess": true,
+    "pattern": "process",
+    "confidence": 0.8,
+    "rationale": "A single task was treated as a process."
+  },
+  "process": {
+    "schemaVersion": "1.0.0",
+    "id": "prc_fixture_single",
+    "name": "Invoice Approval",
+    "domain": "Finance",
+    "version": 1,
+    "status": "draft",
+    "scope": {
+      "trigger": "Invoice submitted",
+      "outcome": "Invoice approved"
+    },
+    "lanes": [{ "id": "lane_ap", "name": "Accounts Payable", "type": "internal" }],
+    "nodes": [
+      {
+        "id": "n_start", "type": "startEvent", "name": "Invoice submitted",
+        "laneId": "lane_ap", "confidence": 0.9,
+        "evidence": [{
+          "sourceId": "src_pdf_a1", "kind": "page",
+          "locator": { "page": 2, "bbox": [100, 200, 260, 226] },
+          "quote": "An approval starts when the invoice is submitted.", "confidence": 0.9
+        }]
+      },
+      {
+        "id": "n_approve", "type": "userTask", "name": "Approve invoice",
+        "laneId": "lane_ap", "confidence": 0.9,
+        "evidence": [{
+          "sourceId": "src_pdf_a1", "kind": "page",
+          "locator": { "page": 2, "bbox": [300, 200, 420, 230] },
+          "quote": "The accounts payable clerk approves the invoice.", "confidence": 0.9
+        }]
+      },
+      {
+        "id": "n_end", "type": "endEvent", "name": "Invoice approved",
+        "laneId": "lane_ap", "confidence": 0.9,
+        "evidence": [{
+          "sourceId": "src_pdf_a1", "kind": "page",
+          "locator": { "page": 2, "bbox": [460, 200, 600, 226] },
+          "quote": "The approval ends when the invoice is approved.", "confidence": 0.9
+        }]
+      }
+    ],
+    "edges": [
+      { "id": "e_1", "from": "n_start", "to": "n_approve" },
+      { "id": "e_2", "from": "n_approve", "to": "n_end" }
+    ],
+    "value": {
+      "lever": ["cycleTime"],
+      "outcome": {
+        "statement": "Approve invoices within one business day",
+        "kpi": "Approval cycle time", "baseline": null, "target": 1,
+        "unit": "days", "horizon": "1 quarter", "basis": "assumption"
+      },
+      "noQuantifiedOutcome": null
+    },
+    "candidates": [],
+    "openQuestions": []
+  },
+  "processes": [],
+  "rejected": []
+}

@@ -1,0 +1,90 @@
+{
+  "projectId": "prj_orders_platform",
+  "projectName": "Orders Platform",
+  "domain": "Sales",
+  "include": ["src/**/*.ts"],
+  "exclude": ["**/*.test.ts", "**/*.spec.ts"],
+  "actors": [
+    { "match": "src/billing/**", "lane": "Billing Operations", "type": "internal" },
+    { "match": "src/collections/**", "lane": "Collections", "type": "internal" },
+    { "match": "src/fulfilment/**", "lane": "Fulfilment Operations", "type": "internal" }
+  ],
+  "processes": [
+    {
+      "id": "invoice_to_cash",
+      "name": "Invoice to Cash",
+      "domain": "Finance",
+      "trigger": "Invoice issued and payment due",
+      "outcome": "Cash collected and receivable closed",
+      "summary": "Invoice issuance, remittance matching, dunning and escalation for B2B orders.",
+      "include": ["src/billing/**/*.ts", "src/collections/**/*.ts"],
+      "sequence": [
+        "Issue invoice",
+        "Apply payment",
+        "Run dunning",
+        "Escalate overdue invoice",
+        "Place credit hold"
+      ],
+      "ignore": ["Retrieve invoice"],
+      "endLane": "Collections",
+      "decisions": [
+        {
+          "after": "Escalate overdue invoice",
+          "name": "Payment recovered?",
+          "branches": [
+            { "condition": "payment recovered", "target": "$end" },
+            { "condition": "payment not recovered", "target": "Place credit hold" }
+          ]
+        }
+      ],
+      "value": {
+        "lever": ["cycleTime", "cost"],
+        "outcome": {
+          "statement": "Reduce DSO from 48 to 38 days by automating remittance matching",
+          "kpi": "DSO",
+          "baseline": 48,
+          "target": 38,
+          "unit": "days",
+          "horizon": "2 quarters",
+          "basis": "assumption"
+        },
+        "automationPotential": 0.62,
+        "automationRationale": "Remittance matching and dunning are rule-based; escalation keeps a human decision."
+      }
+    },
+    {
+      "id": "order_fulfilment",
+      "name": "Order Fulfilment",
+      "domain": "Sales",
+      "trigger": "Sales order submitted",
+      "outcome": "Order shipped to the customer",
+      "summary": "Order intake, credit approval and shipment release.",
+      "include": ["src/fulfilment/**/*.ts"],
+      "sequence": ["Submit order", "Approve order", "Ship order"],
+      "decisions": [
+        {
+          "after": "Approve order",
+          "name": "Credit approved?",
+          "branches": [
+            { "condition": "credit approved", "target": "Ship order" },
+            { "condition": "credit rejected", "target": "$end" }
+          ]
+        }
+      ],
+      "value": {
+        "lever": ["customerExperience", "cycleTime"],
+        "outcome": {
+          "statement": "Release approved orders for shipment within four hours",
+          "kpi": "Order release time",
+          "baseline": 18,
+          "target": 4,
+          "unit": "hours",
+          "horizon": "1 quarter",
+          "basis": "assumption"
+        },
+        "automationPotential": 0.7,
+        "automationRationale": "Credit approval is a rules check; shipment release is a system step."
+      }
+    }
+  ]
+}

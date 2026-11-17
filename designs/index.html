@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Process Atlas — Traceability Hub</title>
+<meta name="description" content="Requirement, use case and test case traceability for the Process Atlas specification set.">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div class="shell">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">PA</div>
+      <div>
+        <div class="brand-name">Process Atlas</div>
+        <div class="brand-sub">Spec set · v1.0</div>
+      </div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-title">Documents</div>
+      <a class="nav-link" href="features.html">Features</a>
+      <a class="nav-link" href="requirements.html">Requirements &amp; use cases</a>
+      <a class="nav-link" href="test-cases.html">Test cases</a>
+      <a class="nav-link is-active" href="index.html">Traceability</a>
+    </div>
+
+    <div class="nav-sep"></div>
+
+    <div class="nav-group">
+      <div class="nav-title">UI specification</div>
+      <a class="nav-link" href="wireframes/index.html">Wireframe gallery</a>
+      <a class="nav-link" href="wireframes/01-bpmn-canvas.html">BPMN canvas</a>
+      <a class="nav-link" href="wireframes/02-evidence-provenance.html">Evidence &amp; provenance</a>
+      <a class="nav-link" href="wireframes/03-portfolio-value.html">Portfolio &amp; value</a>
+      <a class="nav-link" href="wireframes/04-review-compare.html">Review &amp; compare</a>
+    </div>
+
+    <div class="sidebar-foot">
+      <strong>Chain</strong><br>
+      REQ → UC → TC<br><br>
+      <strong>Coverage</strong><br>
+      49/49 requirements
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <div class="topbar">
+      <div class="breadcrumb">Process Atlas / <b>Traceability</b></div>
+      <div class="topbar-right"><span class="pill pill--navy">v1.0</span></div>
+    </div>
+
+    <header class="hero">
+      <div class="hero-inner">
+        <div class="kicker">Specification set</div>
+        <h1>Requirements, use cases, tests and UI samples</h1>
+        <p class="lede">
+          One process model, one requirement baseline, one verification set. Every requirement resolves to a use case
+          and at least one test case; every visualization sample reads from the same model fields.
+        </p>
+        <div class="hero-meta">
+          <div><b>Features</b>12</div>
+          <div><b>Requirements</b>49</div>
+          <div><b>Use cases</b>16</div>
+          <div><b>Test cases</b>60</div>
+          <div><b>Wireframes</b>4</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="wrap">
+
+      <div class="stats">
+        <div class="stat"><div class="v">12</div><div class="k">features</div></div>
+        <div class="stat"><div class="v">49</div><div class="k">requirements</div></div>
+        <div class="stat"><div class="v">16</div><div class="k">use cases</div></div>
+        <div class="stat"><div class="v">60</div><div class="k">test cases</div></div>
+      </div>
+
+      <section class="block" id="chain">
+        <h2 class="sec"><span class="num">01</span>Traceability chain</h2>
+
+        <figure class="diagram">
+          <svg viewBox="0 0 1080 250" role="img" aria-label="Traceability chain from requirement to use case to test case to evidence" font-family="ui-sans-serif, Segoe UI, Inter, sans-serif">
+            <defs>
+              <marker id="a2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0 0 L10 5 L0 10 z" fill="#a3cbe8"/>
+              </marker>
+            </defs>
+
+            <rect x="20" y="86" width="200" height="78" rx="8" fill="#f0f7fc" stroke="#cfe3f3"/>
+            <text x="38" y="112" font-size="9" letter-spacing="1.4" fill="#1f6aab" font-weight="700" font-family="ui-monospace, monospace">REQUIREMENT</text>
+            <text x="38" y="134" font-size="14" font-weight="650" fill="#0b2b45">REQ-EXT-08</text>
+            <text x="38" y="152" font-size="10.5" fill="#5d7488">evidence binding</text>
+
+            <rect x="300" y="86" width="200" height="78" rx="8" fill="#f1eefb" stroke="#ddd6f2"/>
+            <text x="318" y="112" font-size="9" letter-spacing="1.4" fill="#514389" font-weight="700" font-family="ui-monospace, monospace">USE CASE</text>
+            <text x="318" y="134" font-size="14" font-weight="650" fill="#0b2b45">UC-01</text>
+            <text x="318" y="152" font-size="10.5" fill="#5d7488">extract from PDF pack</text>
+
+            <rect x="580" y="86" width="200" height="78" rx="8" fill="#e9f5f4" stroke="#c6e7e4"/>
+            <text x="598" y="112" font-size="9" letter-spacing="1.4" fill="#0b6b69" font-weight="700" font-family="ui-monospace, monospace">TEST CASE</text>
+            <text x="598" y="134" font-size="14" font-weight="650" fill="#0b2b45">TC-012</text>
+            <text x="598" y="152" font-size="10.5" fill="#5d7488">validator rejects no-evidence</text>
+
+            <rect x="860" y="86" width="200" height="78" rx="8" fill="#ffffff" stroke="#d5e3f0"/>
+            <text x="878" y="112" font-size="9" letter-spacing="1.4" fill="#5d7488" font-weight="700" font-family="ui-monospace, monospace">ARTEFACT</text>
+            <text x="878" y="134" font-size="14" font-weight="650" fill="#0b2b45">CPM JSON</text>
+            <text x="878" y="152" font-size="10.5" fill="#5d7488">nodes[].evidence[]</text>
+
+            <g stroke="#a3cbe8" stroke-width="1.5" marker-end="url(#a2)">
+              <line x1="222" y1="125" x2="296" y2="125"/>
+              <line x1="502" y1="125" x2="576" y2="125"/>
+              <line x1="782" y1="125" x2="856" y2="125"/>
+            </g>
+
+            <text x="20" y="205" font-size="10.5" fill="#7e93a5">Bidirectional by construction: a failing test names the requirement, the use case and the element it protects.</text>
+          </svg>
+          <figcaption><b>Figure 1.</b> Traceability chain. Identifiers are stable across documents; anchors link directly to the requirement, use case or test case.</figcaption>
+        </figure>
+      </section>
+
+      <section class="block" id="docs">
+        <h2 class="sec"><span class="num">02</span>Documents</h2>
+        <div class="grid g3">
+          <a class="card doc-card" href="features.html">
+            <div class="label">Spec 01</div>
+            <h3>Features</h3>
+            <p>12 capabilities across extraction, documentation and visualization. Inputs/outputs per feature and the BPMN notation policy.</p>
+            <div class="go">features.html →</div>
+          </a>
+          <a class="card doc-card" href="requirements.html">
+            <div class="label">Spec 02</div>
+            <h3>Requirements &amp; use cases</h3>
+            <p>49 numbered requirements in five groups, 16 use cases with main and alternate flows, 10 quality gates.</p>
+            <div class="go">requirements.html →</div>
+          </a>
+          <a class="card doc-card" href="test-cases.html">
+            <div class="label">Spec 03</div>
+            <h3>Test cases</h3>
+            <p>60 cases across 10 suites, with preconditions, steps, expected results and a full traceability matrix.</p>
+            <div class="go">test-cases.html →</div>
+          </a>
+          <a class="card doc-card" href="wireframes/index.html">
+            <div class="label">UI 01</div>
+            <h3>Wireframe gallery</h3>
+            <p>Static wireframes for the BPMN canvas, provenance panel, portfolio dashboard and review/diff workspace.</p>
+            <div class="go">wireframes/ →</div>
+          </a>
+          <a class="card doc-card" href="samples/cpm-invoice-to-cash.json">
+            <div class="label">Sample</div>
+            <h3>CPM JSON</h3>
+            <p>Complete example process document: lanes, nodes, edges, evidence, value block and run provenance.</p>
+            <div class="go">samples/ →</div>
+          </a>
+          <a class="card doc-card" href="requirements.html#gates">
+            <div class="label">Gates</div>
+            <h3>Quality thresholds</h3>
+            <p>Ten normative gates: F1 thresholds, evidence coverage, BPMN validity, round-trip and reproducibility.</p>
+            <div class="go">requirements.html#gates →</div>
+          </a>
+        </div>
+      </section>
+
+      <section class="block" id="coverage">
+        <h2 class="sec"><span class="num">03</span>Coverage summary</h2>
+        <div class="tablewrap">
+          <table class="tbl compact">
+            <thead><tr><th>Group</th><th>Requirements</th><th>Primary use cases</th><th>Test cases</th><th>Coverage</th></tr></thead>
+            <tbody>
+              <tr><td><b>REQ-EXT</b> — extraction</td><td class="num">15</td><td>UC-01 … UC-07, UC-16</td><td class="num">24</td><td><span class="cov"><span class="dot dot--full"></span>15/15</span></td></tr>
+              <tr><td><b>REQ-VAL</b> — business value</td><td class="num">6</td><td>UC-08, UC-14</td><td class="num">6</td><td><span class="cov"><span class="dot dot--full"></span>6/6</span></td></tr>
+              <tr><td><b>REQ-DOC</b> — documentation</td><td class="num">10</td><td>UC-05, UC-07 … UC-10, UC-13</td><td class="num">10</td><td><span class="cov"><span class="dot dot--full"></span>10/10</span></td></tr>
+              <tr><td><b>REQ-VIZ</b> — visualization</td><td class="num">12</td><td>UC-11 … UC-13</td><td class="num">9</td><td><span class="cov"><span class="dot dot--full"></span>12/12</span></td></tr>
+              <tr><td><b>REQ-MOD</b> — model &amp; API</td><td class="num">6</td><td>UC-01, UC-08, UC-11, UC-15</td><td class="num">5</td><td><span class="cov"><span class="dot dot--full"></span>6/6</span></td></tr>
+              <tr><td><b>Total</b></td><td class="num">49</td><td>16 use cases</td><td class="num">60</td><td><span class="cov"><span class="dot dot--full"></span>49/49</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout">
+          <p><b>Reading order.</b> Features define capability → requirements define testable behaviour → use cases define sequences → test cases verify them → wireframes show the resulting information surfaces. The sample CPM JSON is the contract all of them reference.</p>
+        </div>
+      </section>
+
+      <section class="block" id="artefacts">
+        <h2 class="sec"><span class="num">04</span>Artefact contract</h2>
+        <div class="tablewrap">
+          <table class="tbl compact">
+            <thead><tr><th style="width:22%">Artefact</th><th style="width:26%">Produced by</th><th>Consumed by</th></tr></thead>
+            <tbody>
+              <tr><td><code>source{sha256, artifacts[]}</code></td><td>Ingestion</td><td>Extraction, evidence viewer</td></tr>
+              <tr><td><code>CPM JSON</code></td><td>Extraction + human edits</td><td>Documentation, BPMN export, canvas, portfolio</td></tr>
+              <tr><td><code>evidence[]</code></td><td>Extraction</td><td>Inspector, citation viewer, quality metrics</td></tr>
+              <tr><td><code>value{}</code></td><td>Value extraction</td><td>Brief, portfolio matrix, heat overlay</td></tr>
+              <tr><td><code>.bpmn</code></td><td>BPMN export</td><td>External modelers, round-trip import</td></tr>
+              <tr><td><code>brief / RACI / registers</code></td><td>Documentation</td><td>Export pack, approval</td></tr>
+              <tr><td><code>run manifest</code></td><td>Extraction</td><td>Audit, reproducibility check</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="block" id="extraction">
+        <h2 class="sec"><span class="num">05</span>Extraction contract</h2>
+        <p class="section-intro">Runtime assets that sit behind the model: the domain context given to the model, the extraction prompt, and the gate that rejects arbitrary extraction.</p>
+
+        <div class="grid g3">
+          <a class="card doc-card" href="prompts/context.md">
+            <div class="label">Context</div>
+            <h3>Process definition</h3>
+            <p>Definitions, the nine-check process test, negative archetypes, evidence and value rules, BPMN projection constraints.</p>
+            <div class="go">prompts/context.md →</div>
+          </a>
+          <a class="card doc-card" href="prompts/prompt-extract-process.md">
+            <div class="label">Prompt</div>
+            <h3>Extraction instruction</h3>
+            <p>System prompt, task template, JSON envelope, abstention rules, self-check keyed to validator codes, calibration examples.</p>
+            <div class="go">prompts/prompt-extract-process.md →</div>
+          </a>
+          <a class="card doc-card" href="prompts/validator.md">
+            <div class="label">Gate</div>
+            <h3>Process validator</h3>
+            <p>Identity and compliance gates, scoring, pattern classifier, report shape, integration points and limitations.</p>
+            <div class="go">prompts/validator.md →</div>
+          </a>
+        </div>
+
+        <div class="callout">
+          <p><b>Runnable agent.</b> The context, prompt and validator are wired into an executable pipeline in <code>../agent/</code>: point it at a repository, it discovers processes, builds CPM JSON, validates it, verifies every quote and writes BPMN plus documentation. Start with <a href="../agent/README.md">agent/README.md</a>.</p>
+        </div>
+
+        <div class="callout">
+          <p><b>Two questions, two answers.</b> <em>Identity</em> asks whether the payload is an ordered, actor-bound, outcome-producing set of activities. <em>Compliance</em> asks whether that process satisfies the model contract. A field list is never accepted because its JSON is valid; a real process without lanes is partial, not rejected. Run <code>python3 prompts/validate_extraction.py --self-test</code> to check all nine labelled fixtures.</p>
+        </div>
+      </section>
+
+    </div>
+
+    <div class="doc-footer">
+      <div>Process Atlas · Traceability hub · v1.0</div>
+      <div>12 features · 49 requirements · 16 use cases · 60 tests · 4 wireframes</div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

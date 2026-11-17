@@ -1,0 +1,201 @@
+{
+  "kind": "businessProcess",
+  "classification": {
+    "isBusinessProcess": true,
+    "pattern": "process",
+    "confidence": 0.94,
+    "rationale": "Two named actors, four ordered activities, one evidenced condition and a terminal business outcome."
+  },
+  "process": {
+    "schemaVersion": "1.0.0",
+    "id": "prc_fixture_itc",
+    "projectId": "prj_finance_transformation",
+    "name": "Invoice to Cash",
+    "domain": "Finance",
+    "version": 1,
+    "status": "draft",
+    "summary": "Order validation, credit decision and cash application for B2B sales orders.",
+    "scope": {
+      "trigger": "Purchase order received",
+      "outcome": "Cash collected and receivable closed",
+      "inScope": ["order validation", "credit decision", "invoice issuance", "cash application"],
+      "outOfScope": ["procurement", "payroll"]
+    },
+    "lanes": [
+      { "id": "lane_sales_ops", "name": "Sales Operations", "type": "internal" },
+      { "id": "lane_finance", "name": "Finance", "type": "internal" }
+    ],
+    "nodes": [
+      {
+        "id": "n_start",
+        "type": "startEvent",
+        "name": "Order received",
+        "laneId": "lane_sales_ops",
+        "confidence": 0.95,
+        "evidence": [{
+          "sourceId": "src_pdf_a1",
+          "kind": "page",
+          "locator": { "page": 3, "bbox": [120, 410, 286, 438] },
+          "quote": "The process starts when a customer issues a purchase order.",
+          "confidence": 0.95
+        }]
+      },
+      {
+        "id": "n_validate",
+        "type": "userTask",
+        "name": "Validate order and credit",
+        "laneId": "lane_sales_ops",
+        "confidence": 0.90,
+        "systems": ["sys_crm"],
+        "inputs": ["data_purchase_order"],
+        "outputs": ["data_validation"],
+        "evidence": [{
+          "sourceId": "src_pdf_a1",
+          "kind": "page",
+          "locator": { "page": 4, "bbox": [150, 212, 360, 244] },
+          "quote": "Sales Operations validates the order and runs a credit check.",
+          "confidence": 0.90
+        }]
+      },
+      {
+        "id": "n_gateway",
+        "type": "exclusiveGateway",
+        "name": "Credit approved?",
+        "laneId": "lane_sales_ops",
+        "confidence": 0.91,
+        "evidence": [{
+          "sourceId": "src_pdf_a1",
+          "kind": "page",
+          "locator": { "page": 4, "bbox": [396, 200, 462, 268] },
+          "quote": "If the credit check fails, the order is placed on hold.",
+          "confidence": 0.91
+        }]
+      },
+      {
+        "id": "n_issue",
+        "type": "serviceTask",
+        "name": "Issue invoice",
+        "laneId": "lane_finance",
+        "confidence": 0.94,
+        "systems": ["sys_erp"],
+        "inputs": ["data_sales_order"],
+        "outputs": ["data_invoice"],
+        "evidence": [{
+          "sourceId": "src_pdf_a1",
+          "kind": "page",
+          "locator": { "page": 4, "bbox": [412, 268, 548, 302] },
+          "quote": "Finance issues the invoice within 24 hours of order confirmation.",
+          "confidence": 0.94
+        }]
+      },
+      {
+        "id": "n_apply",
+        "type": "serviceTask",
+        "name": "Apply payment",
+        "laneId": "lane_finance",
+        "confidence": 0.86,
+        "systems": ["sys_erp", "sys_bank_feed"],
+        "inputs": ["data_invoice", "data_remittance"],
+        "outputs": ["data_payment"],
+        "evidence": [{
+          "sourceId": "src_pdf_a1",
+          "kind": "page",
+          "locator": { "page": 5, "bbox": [180, 300, 430, 336] },
+          "quote": "Remittance advice is matched and the payment is applied to the invoice.",
+          "confidence": 0.86
+        }]
+      },
+      {
+        "id": "n_hold",
+        "type": "userTask",
+        "name": "Place credit hold",
+        "laneId": "lane_sales_ops",
+        "confidence": 0.83,
+        "systems": ["sys_crm"],
+        "evidence": [{
+          "sourceId": "src_pdf_a1",
+          "kind": "page",
+          "locator": { "page": 4, "bbox": [150, 340, 380, 372] },
+          "quote": "A failed credit check places the order on hold and notifies the account manager.",
+          "confidence": 0.83
+        }]
+      },
+      {
+        "id": "n_end_cash",
+        "type": "endEvent",
+        "name": "Cash collected",
+        "laneId": "lane_finance",
+        "confidence": 0.95,
+        "evidence": [{
+          "sourceId": "src_pdf_a1",
+          "kind": "page",
+          "locator": { "page": 5, "bbox": [612, 388, 700, 414] },
+          "quote": "The process ends when the receivable is cleared.",
+          "confidence": 0.95
+        }]
+      },
+      {
+        "id": "n_end_reject",
+        "type": "endEvent",
+        "name": "Order rejected",
+        "laneId": "lane_sales_ops",
+        "confidence": 0.88,
+        "evidence": [{
+          "sourceId": "src_pdf_a1",
+          "kind": "page",
+          "locator": { "page": 4, "bbox": [430, 352, 520, 378] },
+          "quote": "If the hold is not released within five days the order is rejected.",
+          "confidence": 0.88
+        }]
+      }
+    ],
+    "edges": [
+      { "id": "e_01", "from": "n_start", "to": "n_validate" },
+      { "id": "e_02", "from": "n_validate", "to": "n_gateway" },
+      { "id": "e_03", "from": "n_gateway", "to": "n_issue", "condition": "credit approved" },
+      { "id": "e_04", "from": "n_gateway", "to": "n_hold", "condition": "credit rejected" },
+      { "id": "e_05", "from": "n_issue", "to": "n_apply" },
+      { "id": "e_06", "from": "n_apply", "to": "n_end_cash" },
+      { "id": "e_07", "from": "n_hold", "to": "n_end_reject" }
+    ],
+    "dataObjects": [
+      { "id": "data_purchase_order", "name": "Purchase order", "producedBy": null },
+      { "id": "data_validation", "name": "Credit check result", "producedBy": "n_validate" },
+      { "id": "data_invoice", "name": "Invoice", "producedBy": "n_issue" },
+      { "id": "data_payment", "name": "Payment record", "producedBy": "n_apply" }
+    ],
+    "systems": [
+      { "id": "sys_crm", "name": "CRM", "role": "systemOfRecord", "tasks": ["n_validate", "n_hold"] },
+      { "id": "sys_erp", "name": "ERP", "role": "systemOfRecord", "tasks": ["n_issue", "n_apply"] }
+    ],
+    "value": {
+      "lever": ["cycleTime", "cost"],
+      "outcome": {
+        "statement": "Reduce DSO from 48 to 38 days by automating remittance matching",
+        "kpi": "DSO",
+        "baseline": 48,
+        "target": 38,
+        "unit": "days",
+        "horizon": "2 quarters",
+        "basis": "assumption"
+      },
+      "kpis": [],
+      "impact": null,
+      "automationPotential": 0.62,
+      "automationRationale": "Remittance matching and invoice issuance are rule-based; credit decisions keep a human approver.",
+      "noQuantifiedOutcome": null
+    },
+    "candidates": [],
+    "assumptions": [],
+    "openQuestions": [],
+    "provenance": {
+      "runId": "run_fixture_01",
+      "promptVersion": "extract@1.0.0",
+      "temperature": 0,
+      "seed": 42,
+      "sourceHashes": ["sha256:6b1f0c9d2e"]
+    }
+  },
+  "processes": [],
+  "rejected": []
+}

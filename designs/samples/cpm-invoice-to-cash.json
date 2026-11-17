@@ -1,0 +1,310 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "prc_01J8Q4Z9K2M7",
+  "projectId": "prj_finance_transformation",
+  "name": "Invoice to Cash",
+  "domain": "Finance",
+  "version": 3,
+  "status": "approved",
+  "createdAt": "2026-11-02T09:14:00Z",
+  "updatedAt": "2026-11-17T11:42:00Z",
+
+  "summary": "Order validation, invoicing, cash application and dunning for B2B sales orders.",
+  "scope": {
+    "trigger": "Purchase order received",
+    "outcome": "Cash collected and receivable closed",
+    "inScope": ["order validation", "credit check", "invoice issuance", "cash application", "dunning"],
+    "outOfScope": ["procurement", "payroll", "tax filing"]
+  },
+
+  "lanes": [
+    { "id": "lane_customer", "name": "Customer", "type": "external" },
+    { "id": "lane_sales_ops", "name": "Sales Operations", "type": "internal" },
+    { "id": "lane_finance", "name": "Finance", "type": "internal" }
+  ],
+
+  "nodes": [
+    {
+      "id": "n_need_identified",
+      "type": "startEvent",
+      "name": "Invoice required",
+      "laneId": "lane_customer",
+      "confidence": 0.96,
+      "evidence": [{
+        "sourceId": "src_pdf_9f2a",
+        "kind": "page",
+        "locator": { "page": 3, "bbox": [120, 410, 286, 438] },
+        "quote": "The process starts when a customer issues a purchase order.",
+        "confidence": 0.96
+      }]
+    },
+    {
+      "id": "n_raise_po",
+      "type": "userTask",
+      "name": "Raise purchase order",
+      "laneId": "lane_customer",
+      "confidence": 0.93,
+      "systems": [],
+      "inputs": [],
+      "outputs": ["data_purchase_order"],
+      "evidence": [{
+        "sourceId": "src_pdf_9f2a",
+        "kind": "page",
+        "locator": { "page": 3, "bbox": [310, 410, 470, 438] },
+        "quote": "Customer raises a purchase order in their procurement portal.",
+        "confidence": 0.93
+      }]
+    },
+    {
+      "id": "n_validate_order",
+      "type": "serviceTask",
+      "name": "Validate order and credit",
+      "laneId": "lane_sales_ops",
+      "confidence": 0.88,
+      "systems": ["sys_crm", "sys_credit_bureau"],
+      "inputs": ["data_purchase_order"],
+      "outputs": ["data_validation_result"],
+      "evidence": [
+        {
+          "sourceId": "src_pdf_9f2a",
+          "kind": "page",
+          "locator": { "page": 4, "bbox": [150, 212, 360, 244] },
+          "quote": "Sales Operations validates the order and runs a credit check.",
+          "confidence": 0.90
+        },
+        {
+          "sourceId": "src_code_41c8",
+          "kind": "code",
+          "locator": { "path": "src/orders/validate-order.ts", "startLine": 42, "endLine": 78 },
+          "quote": "const credit = await creditBureau.check(order.customerId)",
+          "confidence": 0.86
+        }
+      ]
+    },
+    {
+      "id": "n_credit_gateway",
+      "type": "exclusiveGateway",
+      "name": "Credit approved?",
+      "laneId": "lane_sales_ops",
+      "confidence": 0.91,
+      "evidence": [{
+        "sourceId": "src_pdf_9f2a",
+        "kind": "page",
+        "locator": { "page": 4, "bbox": [396, 200, 462, 268] },
+        "quote": "If the credit check fails, the order is placed on hold.",
+        "confidence": 0.91
+      }]
+    },
+    {
+      "id": "n_confirm_order",
+      "type": "userTask",
+      "name": "Confirm order",
+      "laneId": "lane_sales_ops",
+      "confidence": 0.84,
+      "systems": ["sys_crm"],
+      "inputs": ["data_validation_result"],
+      "outputs": ["data_sales_order"],
+      "evidence": [{
+        "sourceId": "src_video_77b1",
+        "kind": "timecode",
+        "locator": { "start": 252, "end": 271 },
+        "quote": "Then sales ops confirms the order in CRM and hands it to billing.",
+        "speaker": "SME Sales Operations",
+        "confidence": 0.84
+      }]
+    },
+    {
+      "id": "n_issue_invoice",
+      "type": "serviceTask",
+      "name": "Issue invoice",
+      "laneId": "lane_finance",
+      "confidence": 0.94,
+      "systems": ["sys_erp"],
+      "inputs": ["data_sales_order"],
+      "outputs": ["data_invoice"],
+      "evidence": [
+        {
+          "sourceId": "src_pdf_9f2a",
+          "kind": "page",
+          "locator": { "page": 4, "bbox": [412, 268, 548, 302] },
+          "quote": "Finance issues the invoice within 24 hours of order confirmation.",
+          "confidence": 0.95
+        },
+        {
+          "sourceId": "src_code_41c8",
+          "kind": "code",
+          "locator": { "path": "src/billing/invoice.ts", "startLine": 112, "endLine": 140 },
+          "quote": "await erp.invoices.create({ orderId, dueDate, amount })",
+          "confidence": 0.92
+        }
+      ]
+    },
+    {
+      "id": "n_apply_payment",
+      "type": "userTask",
+      "name": "Apply payment and dunning",
+      "laneId": "lane_finance",
+      "confidence": 0.79,
+      "systems": ["sys_erp", "sys_bank_feed"],
+      "inputs": ["data_invoice", "data_remittance_advice"],
+      "outputs": ["data_payment"],
+      "evidence": [{
+        "sourceId": "src_pdf_9f2a",
+        "kind": "page",
+        "locator": { "page": 5, "bbox": [180, 300, 430, 336] },
+        "quote": "Remittance advice is matched manually; unmatched items enter dunning.",
+        "confidence": 0.79
+      }]
+    },
+    {
+      "id": "n_cash_collected",
+      "type": "endEvent",
+      "name": "Cash collected",
+      "laneId": "lane_finance",
+      "confidence": 0.95,
+      "evidence": [{
+        "sourceId": "src_pdf_9f2a",
+        "kind": "page",
+        "locator": { "page": 5, "bbox": [612, 388, 700, 414] },
+        "quote": "The process ends when the receivable is cleared.",
+        "confidence": 0.95
+      }]
+    },
+    {
+      "id": "n_credit_hold",
+      "type": "userTask",
+      "name": "Place credit hold and notify",
+      "laneId": "lane_sales_ops",
+      "confidence": 0.82,
+      "systems": ["sys_crm"],
+      "evidence": [{
+        "sourceId": "src_pdf_9f2a",
+        "kind": "page",
+        "locator": { "page": 4, "bbox": [150, 340, 380, 372] },
+        "quote": "A failed credit check places the order on hold and notifies the account manager.",
+        "confidence": 0.82
+      }]
+    },
+    {
+      "id": "n_order_rejected",
+      "type": "endEvent",
+      "name": "Order rejected",
+      "laneId": "lane_sales_ops",
+      "confidence": 0.88,
+      "evidence": [{
+        "sourceId": "src_pdf_9f2a",
+        "kind": "page",
+        "locator": { "page": 4, "bbox": [430, 352, 520, 378] },
+        "quote": "If the hold is not released within five days the order is rejected.",
+        "confidence": 0.88
+      }]
+    }
+  ],
+
+  "edges": [
+    { "id": "e_01", "from": "n_need_identified", "to": "n_raise_po" },
+    { "id": "e_02", "from": "n_raise_po", "to": "n_validate_order" },
+    { "id": "e_03", "from": "n_validate_order", "to": "n_credit_gateway" },
+    { "id": "e_04", "from": "n_credit_gateway", "to": "n_confirm_order", "condition": "credit approved" },
+    { "id": "e_05", "from": "n_credit_gateway", "to": "n_credit_hold", "condition": "credit rejected" },
+    { "id": "e_06", "from": "n_confirm_order", "to": "n_issue_invoice" },
+    { "id": "e_07", "from": "n_issue_invoice", "to": "n_apply_payment" },
+    { "id": "e_08", "from": "n_apply_payment", "to": "n_cash_collected" },
+    { "id": "e_09", "from": "n_credit_hold", "to": "n_order_rejected" }
+  ],
+
+  "dataObjects": [
+    { "id": "data_purchase_order", "name": "Purchase order", "producedBy": "n_raise_po" },
+    { "id": "data_validation_result", "name": "Credit check result", "producedBy": "n_validate_order" },
+    { "id": "data_sales_order", "name": "Sales order", "producedBy": "n_confirm_order" },
+    { "id": "data_invoice", "name": "Invoice PDF", "producedBy": "n_issue_invoice" },
+    { "id": "data_remittance_advice", "name": "Remittance advice", "producedBy": null },
+    { "id": "data_payment", "name": "Payment record", "producedBy": "n_apply_payment" }
+  ],
+
+  "systems": [
+    { "id": "sys_crm", "name": "CRM", "role": "systemOfRecord", "tasks": ["n_validate_order", "n_confirm_order", "n_credit_hold"] },
+    { "id": "sys_erp", "name": "ERP", "role": "systemOfRecord", "tasks": ["n_issue_invoice", "n_apply_payment"] },
+    { "id": "sys_bank_feed", "name": "Bank statement feed", "role": "input", "tasks": ["n_apply_payment"] },
+    { "id": "sys_credit_bureau", "name": "Credit bureau API", "role": "external", "tasks": ["n_validate_order"] }
+  ],
+
+  "value": {
+    "lever": ["cycleTime", "cost"],
+    "outcome": {
+      "statement": "Reduce DSO from 48 to 38 days by automating remittance matching",
+      "kpi": "DSO",
+      "baseline": 48,
+      "target": 38,
+      "unit": "days",
+      "horizon": "2 quarters",
+      "basis": "assumption"
+    },
+    "kpis": [
+      { "name": "DSO", "unit": "days", "baseline": 48, "target": 38, "evidenceId": null, "assumed": true },
+      { "name": "Manual remittance matches", "unit": "per month", "baseline": 3200, "target": 400, "evidenceId": "ev_77b1_03", "assumed": false }
+    ],
+    "impact": {
+      "annualisedUsd": 230000,
+      "method": "working_capital_release + removed_touch_effort",
+      "assumptions": [
+        "Accounts receivable base $40M",
+        "Cost of capital 12%",
+        "4 minutes saved per manual match at $38/hour"
+      ],
+      "rounding": "two_significant_figures",
+      "confidence": 0.72
+    },
+    "automationPotential": 0.62,
+    "automationRationale": "Remittance matching and invoice issuance are rule-based; credit decisions retain human approval.",
+    "priorityScore": {
+      "value": 78,
+      "formulaVersion": "policy/priority@1.0",
+      "inputs": { "normalisedImpact": 0.71, "frequency": 0.9, "automationPotential": 0.62, "confidence": 0.72, "riskExposure": 0.2 }
+    }
+  },
+
+  "findings": [
+    {
+      "id": "f_01",
+      "type": "ACTOR_MISMATCH",
+      "elementId": "n_validate_order",
+      "severity": "medium",
+      "citations": [
+        { "sourceId": "src_pdf_9f2a", "locator": { "page": 4, "bbox": [150, 212, 360, 244] }, "value": "Sales Operations" },
+        { "sourceId": "src_code_41c8", "locator": { "path": "src/orders/validate-order.ts", "startLine": 12, "endLine": 20 }, "value": "Billing service" }
+      ],
+      "resolution": {
+        "decision": "acceptDocumented",
+        "reason": "Code performs the check but ownership sits with Sales Operations.",
+        "decidedBy": "analyst_04",
+        "decidedAt": "2026-11-16T15:20:00Z"
+      }
+    }
+  ],
+
+  "assumptions": [
+    { "id": "a_01", "statement": "DSO baseline of 48 days is current.", "owner": "finance_controller", "status": "open" },
+    { "id": "a_02", "statement": "Remittance automation removes 2,800 of 3,200 monthly matches.", "owner": "analyst_04", "status": "open" }
+  ],
+
+  "openQuestions": [
+    { "id": "q_01", "question": "Which system owns the dunning schedule?", "raisedBy": "analyst_04", "status": "open" }
+  ],
+
+  "provenance": {
+    "runId": "run_7c1e9a",
+    "promptVersion": "extract@1.4.0",
+    "model": "configurable",
+    "temperature": 0,
+    "seed": 42,
+    "sourceHashes": [
+      "sha256:6b1f0c9d2e...",
+      "sha256:af0d31c8b4...",
+      "sha256:77b1e2a5c9..."
+    ],
+    "reviewedBy": ["analyst_04", "finance_controller"],
+    "approvedBy": "process_owner_finance",
+    "approvedAt": "2026-11-17T11:42:00Z"
+  }
+}

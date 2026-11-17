@@ -1,0 +1,35 @@
+{
+  "kind": "businessProcess",
+  "classification": {
+    "isBusinessProcess": true,
+    "pattern": "process",
+    "confidence": 0.6,
+    "rationale": "Reporting lines were misread as sequence flows."
+  },
+  "process": {
+    "schemaVersion": "1.0.0",
+    "id": "prc_fixture_org",
+    "name": "Finance Organisation",
+    "domain": "Finance",
+    "version": 1,
+    "status": "draft",
+    "scope": { "trigger": "", "outcome": "" },
+    "lanes": [],
+    "nodes": [
+      { "id": "n_cfo", "type": "task", "name": "CFO", "confidence": 0.8 },
+      { "id": "n_ctrl", "type": "task", "name": "Financial Controller", "confidence": 0.8 },
+      { "id": "n_apm", "type": "task", "name": "AP Manager", "confidence": 0.8 },
+      { "id": "n_apc", "type": "task", "name": "AP Clerk", "confidence": 0.8 }
+    ],
+    "edges": [
+      { "id": "e_1", "from": "n_cfo", "to": "n_ctrl", "condition": "reports to" },
+      { "id": "e_2", "from": "n_ctrl", "to": "n_apm", "condition": "reports to" },
+      { "id": "e_3", "from": "n_apm", "to": "n_apc", "condition": "reports to" }
+    ],
+    "value": {},
+    "candidates": [],
+    "openQuestions": []
+  },
+  "processes": [],
+  "rejected": []
+}

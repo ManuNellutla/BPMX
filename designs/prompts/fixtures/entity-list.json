@@ -1,0 +1,34 @@
+{
+  "kind": "businessProcess",
+  "classification": {
+    "isBusinessProcess": true,
+    "pattern": "process",
+    "confidence": 0.72,
+    "rationale": "Model wrongly claimed a process for a field inventory."
+  },
+  "process": {
+    "schemaVersion": "1.0.0",
+    "id": "prc_fixture_fields",
+    "name": "Invoice Fields",
+    "domain": "Finance",
+    "version": 1,
+    "status": "draft",
+    "scope": { "trigger": "", "outcome": "", "inScope": [], "outOfScope": [] },
+    "lanes": [],
+    "nodes": [
+      { "id": "n_1", "type": "dataObject", "name": "Invoice Number", "confidence": 0.9 },
+      { "id": "n_2", "type": "dataObject", "name": "Customer Name", "confidence": 0.9 },
+      { "id": "n_3", "type": "dataObject", "name": "Amount", "confidence": 0.9 },
+      { "id": "n_4", "type": "dataObject", "name": "Due Date", "confidence": 0.9 },
+      { "id": "n_5", "type": "dataObject", "name": "Status", "confidence": 0.9 }
+    ],
+    "edges": [],
+    "dataObjects": [],
+    "systems": [],
+    "value": {},
+    "candidates": [],
+    "openQuestions": []
+  },
+  "processes": [],
+  "rejected": []
+}

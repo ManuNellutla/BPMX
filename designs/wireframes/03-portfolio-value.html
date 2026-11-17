@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe — Portfolio &amp; value prioritisation</title>
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="wf.css">
+</head>
+<body class="wf">
+
+<div class="wf-top">
+  <div class="wf-brand"><span class="wf-mark">PA</span> Process Atlas</div>
+  <div class="wf-top-project">Finance Transformation / <b>Portfolio</b></div>
+  <div class="wf-top-right">
+    <span class="wf-ribbon">Wireframe</span>
+    <a class="wf-btn" href="01-bpmn-canvas.html">← Canvas</a>
+    <button class="wf-btn wf-btn--primary">Export shortlist</button>
+  </div>
+</div>
+
+<div class="wf-scroll">
+
+  <div class="wf-filters">
+    <span class="wf-select">Domain: <b>Finance</b> ▾</span>
+    <span class="wf-select">Status: <b>All</b> ▾</span>
+    <span class="wf-select">Lever: <b>All</b> ▾</span>
+    <span class="wf-select">Confidence: <b>≥ 0.50</b> ▾</span>
+    <span style="margin-left:auto;font-family:var(--font-mono);font-size:9px;color:#7e93a5">formula policy/priority@1.0 · 12 processes</span>
+  </div>
+
+  <div class="wf-kpis">
+    <div class="wf-kpi"><div class="v">12</div><div class="k">processes discovered</div></div>
+    <div class="wf-kpi"><div class="v">7</div><div class="k">with quantified outcome</div></div>
+    <div class="wf-kpi"><div class="v">$1.24M</div><div class="k">annualised identified</div></div>
+    <div class="wf-kpi"><div class="v">93%</div><div class="k">evidence coverage</div></div>
+  </div>
+
+  <div class="wf-grid2" style="grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);margin-bottom:12px">
+
+    <!-- ================= MATRIX ================= -->
+    <div class="wf-panel">
+      <div class="wf-panel-head">Priority matrix <span class="right">value vs. effort · bubble = confidence</span></div>
+      <div class="wf-panel-body">
+        <svg viewBox="0 0 540 310" role="img" aria-label="Value versus effort matrix with six process bubbles" font-family="ui-sans-serif, Segoe UI, Inter, sans-serif">
+          <defs>
+            <marker id="ax" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M0 0 L10 5 L0 10 z" fill="#7e93a5"/>
+            </marker>
+          </defs>
+
+          <!-- plot -->
+          <rect x="70" y="24" width="430" height="236" fill="#fbfdff" stroke="#e7f0f8"/>
+          <line x1="285" y1="24" x2="285" y2="260" stroke="#d5e3f0" stroke-dasharray="3 4"/>
+          <line x1="70" y1="142" x2="500" y2="142" stroke="#d5e3f0" stroke-dasharray="3 4"/>
+
+          <!-- quadrant labels -->
+          <text x="80" y="38" font-size="8" fill="#9ab0c2" font-family="ui-monospace, monospace">PLAN</text>
+          <text x="490" y="38" font-size="8" fill="#9ab0c2" text-anchor="end" font-family="ui-monospace, monospace">DEFER</text>
+          <text x="80" y="254" font-size="8" fill="#9ab0c2" font-family="ui-monospace, monospace">QUICK WINS</text>
+          <text x="490" y="254" font-size="8" fill="#9ab0c2" text-anchor="end" font-family="ui-monospace, monospace">REVIEW</text>
+
+          <!-- axes -->
+          <line x1="70" y1="260" x2="500" y2="260" stroke="#7e93a5" stroke-width="1" marker-end="url(#ax)"/>
+          <line x1="70" y1="260" x2="70" y2="24" stroke="#7e93a5" stroke-width="1" marker-end="url(#ax)"/>
+          <text x="285" y="284" font-size="9" fill="#5d7488" text-anchor="middle">effort / complexity →</text>
+          <text x="20" y="142" font-size="9" fill="#5d7488" text-anchor="middle" transform="rotate(-90 20 142)">value →</text>
+
+          <!-- bubbles -->
+          <g>
+            <circle cx="233" cy="71" r="20" fill="#1f6aab" opacity=".18"/>
+            <circle cx="233" cy="71" r="13" fill="#1f6aab" opacity=".9"/>
+            <text x="233" y="74" font-size="8" fill="#fff" text-anchor="middle" font-weight="700">78</text>
+            <text x="252" y="68" font-size="9" fill="#0b2b45" font-weight="600">Invoice to Cash</text>
+            <text x="252" y="79" font-size="8" fill="#7e93a5">$230k · 0.72</text>
+          </g>
+
+          <g>
+            <circle cx="165" cy="117" r="19" fill="#0e7c7b" opacity=".16"/>
+            <circle cx="165" cy="117" r="12" fill="#0e7c7b" opacity=".9"/>
+            <text x="165" y="120" font-size="8" fill="#fff" text-anchor="middle" font-weight="700">81</text>
+            <text x="184" y="114" font-size="9" fill="#0b2b45" font-weight="600">Credit Control</text>
+            <text x="184" y="125" font-size="8" fill="#7e93a5">$410k · 0.64</text>
+          </g>
+
+          <g>
+            <circle cx="307" cy="90" r="17" fill="#57479b" opacity=".15"/>
+            <circle cx="307" cy="90" r="11" fill="#57479b" opacity=".88"/>
+            <text x="307" y="93" font-size="8" fill="#fff" text-anchor="middle" font-weight="700">66</text>
+            <text x="325" y="87" font-size="9" fill="#0b2b45" font-weight="600">Vendor Onboarding</text>
+            <text x="325" y="98" font-size="8" fill="#7e93a5">$95k · 0.58</text>
+          </g>
+
+          <g>
+            <circle cx="405" cy="108" r="18" fill="#a96a12" opacity=".15"/>
+            <circle cx="405" cy="108" r="11.5" fill="#a96a12" opacity=".85"/>
+            <text x="405" y="111" font-size="8" fill="#fff" text-anchor="middle" font-weight="700">62</text>
+            <text x="423" y="105" font-size="9" fill="#0b2b45" font-weight="600">Order to Delivery</text>
+            <text x="423" y="116" font-size="8" fill="#7e93a5">$310k · 0.49</text>
+          </g>
+
+          <g>
+            <circle cx="147" cy="191" r="16" fill="#0e7c7b" opacity=".15"/>
+            <circle cx="147" cy="191" r="10" fill="#0e7c7b" opacity=".85"/>
+            <text x="147" y="194" font-size="8" fill="#fff" text-anchor="middle" font-weight="700">71</text>
+            <text x="164" y="188" font-size="9" fill="#0b2b45" font-weight="600">Expense Reimbursement</text>
+            <text x="164" y="199" font-size="8" fill="#7e93a5">$140k · 0.81</text>
+          </g>
+
+          <g>
+            <circle cx="336" cy="196" r="12" fill="#9ab0c2" opacity=".35"/>
+            <circle cx="336" cy="196" r="8" fill="#7e93a5" opacity=".85"/>
+            <text x="353" y="193" font-size="9" fill="#5d7488">Payroll Corrections</text>
+            <text x="353" y="204" font-size="8" fill="#9ab0c2">not quantified</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <!-- ================= FORMULA / LEVERS ================= -->
+    <div class="wf-stack">
+      <div class="wf-panel">
+        <div class="wf-panel-head">Priority score <span class="right">policy/priority@1.0</span></div>
+        <div class="wf-panel-body">
+          <div style="font-family:var(--font-mono);font-size:9.5px;line-height:1.9;color:#2e4559">
+            score = <b>0.35</b>·norm(impact)<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;+ <b>0.20</b>·frequency<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;+ <b>0.25</b>·automation<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;+ <b>0.10</b>·confidence<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;− <b>0.10</b>·riskExposure
+          </div>
+          <div class="wf-note">Inputs stored per process; recomputation must match the stored score.</div>
+        </div>
+      </div>
+
+      <div class="wf-panel">
+        <div class="wf-panel-head">Value levers</div>
+        <div class="wf-panel-body" style="display:flex;flex-wrap:wrap;gap:5px">
+          <span class="wf-badge" style="background:#f0f7fc;color:#17517e;border-color:#cfe3f3">cycle time</span>
+          <span class="wf-badge" style="background:#f0f7fc;color:#17517e;border-color:#cfe3f3">cost</span>
+          <span class="wf-badge" style="background:#f1eefb;color:#514389;border-color:#ddd6f2">risk</span>
+          <span class="wf-badge" style="background:#e9f5f4;color:#0b6b69;border-color:#c6e7e4">compliance</span>
+          <span class="wf-badge" style="background:#fdf4e4;color:#8a5510;border-color:#efdcb8">revenue</span>
+          <span class="wf-badge" style="background:#fceef0;color:#8e3540;border-color:#f2d4d9">customer experience</span>
+        </div>
+      </div>
+
+      <div class="wf-panel">
+        <div class="wf-panel-head">Assumption flags <span class="right">visible in every view</span></div>
+        <div class="wf-panel-body" style="display:flex;flex-direction:column;gap:7px;font-size:10.8px;color:#2e4559">
+          <div>⚠ DSO baseline 48 d — <span style="font-family:var(--font-mono);font-size:8.5px;color:#8a5510">assumed</span></div>
+          <div>⚠ 2,800 of 3,200 matches automated — <span style="font-family:var(--font-mono);font-size:8.5px;color:#8a5510">assumed</span></div>
+          <div>✓ AR base $40M — <span style="font-family:var(--font-mono);font-size:8.5px;color:#0b6b69">cited p.7</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TABLE ================= -->
+  <div class="wf-panel">
+    <div class="wf-panel-head">Processes <span class="right">sorted by priority score</span></div>
+    <table class="wf-table">
+      <thead>
+        <tr><th>Process</th><th>Lever</th><th>KPI · baseline → target</th><th>Impact / yr</th><th>Conf.</th><th>Priority</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>Credit Control</b><div style="font-family:var(--font-mono);font-size:8.5px;color:#7e93a5">prc_…4f2a · v4</div></td>
+          <td>risk</td><td>overdue &gt;60d · 18% → 9%</td><td>$410k</td><td>0.64</td>
+          <td><span class="wf-bar"><i style="width:81%"></i></span> <span style="font-family:var(--font-mono);font-size:9px">81</span></td>
+          <td><span class="wf-badge wf-badge--mod">draft</span></td>
+        </tr>
+        <tr>
+          <td><b>Invoice to Cash</b><div style="font-family:var(--font-mono);font-size:8.5px;color:#7e93a5">prc_…9K2M · v3</div></td>
+          <td>cycle time · cost</td><td>DSO · 48 → 38 d</td><td>$230k</td><td>0.72</td>
+          <td><span class="wf-bar"><i style="width:78%"></i></span> <span style="font-family:var(--font-mono);font-size:9px">78</span></td>
+          <td><span class="wf-badge wf-badge--add">approved</span></td>
+        </tr>
+        <tr>
+          <td><b>Expense Reimbursement</b><div style="font-family:var(--font-mono);font-size:8.5px;color:#7e93a5">prc_…1b7c · v1</div></td>
+          <td>cost</td><td>effort/claim · 9.1 → 4.5 min</td><td>$140k</td><td>0.81</td>
+          <td><span class="wf-bar"><i style="width:71%"></i></span> <span style="font-family:var(--font-mono);font-size:9px">71</span></td>
+          <td><span class="wf-badge wf-badge--add">approved</span></td>
+        </tr>
+        <tr>
+          <td><b>Vendor Onboarding</b><div style="font-family:var(--font-mono);font-size:8.5px;color:#7e93a5">prc_…8d3e · v2</div></td>
+          <td>cycle time</td><td>onboarding · 21 → 7 d</td><td>$95k</td><td>0.58</td>
+          <td><span class="wf-bar"><i style="width:66%"></i></span> <span style="font-family:var(--font-mono);font-size:9px">66</span></td>
+          <td><span class="wf-badge wf-badge--mod">in review</span></td>
+        </tr>
+        <tr>
+          <td><b>Order to Delivery</b><div style="font-family:var(--font-mono);font-size:8.5px;color:#7e93a5">prc_…6a90 · v1</div></td>
+          <td>revenue</td><td>OTIF · 86% → 95%</td><td>$310k</td><td>0.49</td>
+          <td><span class="wf-bar"><i style="width:62%"></i></span> <span style="font-family:var(--font-mono);font-size:9px">62</span></td>
+          <td><span class="wf-badge wf-badge--mod">draft</span></td>
+        </tr>
+        <tr>
+          <td><b>Payroll Corrections</b><div style="font-family:var(--font-mono);font-size:8.5px;color:#7e93a5">prc_…2c55 · v1</div></td>
+          <td>compliance</td><td>exceptions · 42 → 10 / mo</td><td>—</td><td>0.35</td>
+          <td><span class="wf-bar"><i style="width:31%"></i></span> <span style="font-family:var(--font-mono);font-size:9px">31</span></td>
+          <td><span class="wf-badge wf-badge--del">not quantified</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:10px;font-family:var(--font-mono);font-size:9px;color:#7e93a5;display:flex;gap:18px;flex-wrap:wrap">
+    <span>bubble size = confidence</span>
+    <span>grey = no quantified outcome, excluded from ranking</span>
+    <span>impact values are annualised USD with assumptions attached</span>
+  </div>
+
+</div>
+
+</body>
+</html>

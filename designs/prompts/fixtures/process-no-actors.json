@@ -1,0 +1,73 @@
+{
+  "kind": "businessProcess",
+  "classification": {
+    "isBusinessProcess": true,
+    "pattern": "process",
+    "confidence": 0.88,
+    "rationale": "Ordered activities are present but no actor performs any of them."
+  },
+  "process": {
+    "schemaVersion": "1.0.0",
+    "id": "prc_fixture_no_actors",
+    "name": "Expense Reimbursement",
+    "domain": "Finance",
+    "version": 1,
+    "status": "draft",
+    "scope": {
+      "trigger": "Expense claim submitted",
+      "outcome": "Employee reimbursed"
+    },
+    "lanes": [],
+    "nodes": [
+      {
+        "id": "n_start", "type": "startEvent", "name": "Claim submitted", "confidence": 0.9,
+        "evidence": [{ "sourceId": "s1", "kind": "page",
+          "locator": { "page": 1, "bbox": [10, 10, 100, 30] },
+          "quote": "The claim starts when the employee submits the form.", "confidence": 0.9 }]
+      },
+      {
+        "id": "n_submit", "type": "task", "name": "Submit expense claim", "confidence": 0.9,
+        "evidence": [{ "sourceId": "s1", "kind": "page",
+          "locator": { "page": 1, "bbox": [110, 10, 240, 40] },
+          "quote": "The employee submits the expense claim with receipts.", "confidence": 0.9 }]
+      },
+      {
+        "id": "n_review", "type": "task", "name": "Review expense claim", "confidence": 0.85,
+        "evidence": [{ "sourceId": "s1", "kind": "page",
+          "locator": { "page": 1, "bbox": [250, 10, 380, 40] },
+          "quote": "The claim is reviewed against the travel policy.", "confidence": 0.85 }]
+      },
+      {
+        "id": "n_pay", "type": "task", "name": "Reimburse employee", "confidence": 0.85,
+        "evidence": [{ "sourceId": "s1", "kind": "page",
+          "locator": { "page": 1, "bbox": [390, 10, 520, 40] },
+          "quote": "Approved claims are reimbursed in the next payroll run.", "confidence": 0.85 }]
+      },
+      {
+        "id": "n_end", "type": "endEvent", "name": "Claim settled", "confidence": 0.9,
+        "evidence": [{ "sourceId": "s1", "kind": "page",
+          "locator": { "page": 1, "bbox": [530, 10, 620, 30] },
+          "quote": "The process ends when the claim is settled.", "confidence": 0.9 }]
+      }
+    ],
+    "edges": [
+      { "id": "e_1", "from": "n_start", "to": "n_submit" },
+      { "id": "e_2", "from": "n_submit", "to": "n_review" },
+      { "id": "e_3", "from": "n_review", "to": "n_pay" },
+      { "id": "e_4", "from": "n_pay", "to": "n_end" }
+    ],
+    "value": {
+      "lever": ["cost", "cycleTime"],
+      "outcome": {
+        "statement": "Reduce reimbursement cycle time from 9 to 4 days",
+        "kpi": "Reimbursement cycle time", "baseline": 9, "target": 4,
+        "unit": "days", "horizon": "2 quarters", "basis": "cited"
+      },
+      "noQuantifiedOutcome": null
+    },
+    "candidates": [],
+    "openQuestions": []
+  },
+  "processes": [],
+  "rejected": []
+}
